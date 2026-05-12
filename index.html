@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신촌연합교회 주일예배일지</title>
+
+<!-- ✅ 여기에 Firebase 설정을 입력하세요 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, orderBy, query }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA5N3_4rGrlMsjTfebPv7XHwlrXnPDmT38",
+    authDomain: "suc-journal.firebaseapp.com",
+    projectId: "suc-journal",
+    storageBucket: "suc-journal.firebasestorage.app",
+    messagingSenderId: "191671853524",
+    appId: "1:191671853524:web:55806820f5346da886f641"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 전역 노출
+  window._db = db;
+  window._col = collection(db, "records");
+  window._fns = { collection, addDoc, getDocs, doc, deleteDoc, updateDoc, orderBy, query };
+  window._dbReady = true;
+  document.dispatchEvent(new Event('db-ready'));
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0f2f5;color:#111;}
+#app{max-width:860px;margin:0 auto;padding:14px;}
+
+/* 탭 */
+.tabs{display:flex;gap:8px;margin-bottom:14px;}
+.tab-btn{flex:1;padding:10px;border:none;border-radius:8px;background:#fff;color:#555;font-size:14px;cursor:pointer;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.1);transition:all .2s;}
+.tab-btn.active{background:#1a3a5c;color:#fff;}
+
+/* 카드 */
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:14px;}
+.card h2{font-size:17px;font-weight:800;margin-bottom:16px;color:#1a202c;border-bottom:2px solid #1a3a5c;padding-bottom:9px;}
+.sec{font-size:11px;font-weight:800;color:#1a3a5c;margin:18px 0 9px;letter-spacing:.5px;}
+
+/* 부수 선택 */
+.part-sel{display:flex;gap:8px;margin-bottom:4px;}
+.part-btn{flex:1;padding:9px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;}
+.part-btn.active{border-color:#1a3a5c;background:#1a3a5c;color:#fff;}
+
+/* 폼 필드 */
+.row{display:flex;gap:10px;margin-bottom:9px;flex-wrap:wrap;}
+.fg{display:flex;flex-direction:column;gap:3px;flex:1;min-width:130px;}
+.fg label{font-size:11px;color:#666;font-weight:700;}
+.fg input,.fg textarea{border:1px solid #ddd;border-radius:6px;padding:7px 9px;font-size:13px;font-family:inherit;background:#fafafa;transition:border .2s;}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:#1a3a5c;background:#fff;}
+.fg textarea{resize:vertical;min-height:72px;}
+.fixed{background:#eef2ff!important;color:#1a3a5c;font-weight:700;}
+
+/* 인원 합계 */
+.sum-box{background:#eef2ff;border-radius:8px;padding:11px 14px;font-size:13px;font-weight:700;color:#1a3a5c;margin-top:4px;}
+
+/* 버튼 */
+.act-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.btn{padding:10px 18px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:#1a3a5c;color:#fff;flex:1;}
+.btn-sub{background:#e2e8f0;color:#333;}
+.btn-print{background:#d1fae5;color:#065f46;}
+.btn-danger{background:#fee2e2;color:#991b1b;}
+.btn-edit{background:#fef9c3;color:#78350f;}
+.btn-back{background:#e2e8f0;color:#333;}
+
+/* 목록 */
+.list-empty{padding:40px;text-align:center;color:#aaa;font-size:14px;}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s;}
+.list-item:hover{background:#f7faff;}
+.list-item:last-child{border-bottom:none;}
+.li-title{font-weight:700;font-size:14px;color:#1a202c;}
+.li-meta{font-size:11px;color:#888;margin-top:2px;}
+.li-arr{color:#ccc;font-size:20px;}
+
+/* 로딩 */
+.loading{padding:40px;text-align:center;color:#888;font-size:14px;}
+
+/* 모달 */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:24px;max-width:460px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.2);}
+.modal h3{font-size:16px;font-weight:800;margin-bottom:12px;}
+.modal p{font-size:13px;color:#555;margin-bottom:8px;line-height:1.6;}
+.modal-btns{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.modal-btns .btn{flex:1;}
+
+/* ══ 인쇄 양식 ══ */
+.pf-title{background:#4a4a4a;color:#fff;text-align:center;font-size:19px;font-weight:900;padding:13px 10px;letter-spacing:2px;border:2px solid #222;border-bottom:none;}
+.pf-head{width:100%;border-collapse:collapse;border:2px solid #222;border-bottom:none;}
+.pf-head td{border:1px solid #666;padding:6px 10px;font-size:12px;vertical-align:middle;}
+.h-lbl{background:#d0d0d0;font-weight:700;text-align:center;white-space:nowrap;width:60px;}
+.h-val{background:#fff;}
+.pf-body{width:100%;border-collapse:collapse;border:2px solid #222;border-bottom:none;}
+.pf-body td{border:1px solid #777;padding:5px 8px;font-size:12px;vertical-align:middle;}
+.lbl{background:#d0d0d0;font-weight:700;text-align:center;white-space:nowrap;width:108px;}
+.val{background:#fff;}
+.pf-att{width:100%;border-collapse:collapse;border:2px solid #222;border-bottom:none;}
+.pf-att td{border:1px solid #777;padding:6px 10px;font-size:12px;vertical-align:top;}
+.att-lbl{background:#d0d0d0;font-weight:700;text-align:center;vertical-align:middle!important;white-space:nowrap;width:108px;}
+.att-sec{font-weight:700;margin-bottom:3px;}
+.pf-tot{width:100%;border-collapse:collapse;border:2px solid #222;}
+.pf-tot td{border:1px solid #777;padding:7px 10px;font-size:12px;vertical-align:top;}
+.tot-lbl{background:#d0d0d0;font-weight:700;text-align:center;vertical-align:middle!important;white-space:nowrap;width:108px;}
+.tot-val{background:#fff;line-height:2;}
+
+@media print{
+  body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #app>*:not(#print-area){display:none!important;}
+  #print-area{display:block!important;}
+  @page{size:A4 portrait;margin:12mm 10mm;}
+}
+#print-area{display:none;}
+
+@media(max-width:600px){
+  .row{flex-direction:column;}
+  .fg{min-width:unset;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('write')">✏️ 일지 작성</button>
+    <button class="tab-btn" onclick="showTab('list')">📋 저장된 일지</button>
+  </div>
+
+  <!-- 작성 탭 -->
+  <div id="tab-write">
+    <div class="card">
+      <h2>주일예배 일지 작성</h2>
+
+      <div class="sec">예배 부수</div>
+      <div class="part-sel">
+        <button class="part-btn active" onclick="setPart(1)">1부</button>
+        <button class="part-btn" onclick="setPart(2)">2부</button>
+        <button class="part-btn" onclick="setPart(3)">3부</button>
+      </div>
+
+      <div class="sec">기본 정보</div>
+      <div class="row">
+        <div class="fg"><label>날짜</label><input type="date" id="f-date"></div>
+        <div class="fg"><label>시간</label><input type="time" id="f-time"></div>
+        <div class="fg"><label>작성자</label><input type="text" id="f-writer" placeholder="이름 입력"></div>
+      </div>
+
+      <div class="sec">예배 순서</div>
+      <div class="row">
+        <div class="fg"><label>예배의 부름</label><input type="text" id="f-call" class="fixed" value="다같이"></div>
+        <div class="fg"><label>신앙고백</label><input type="text" id="f-creed" class="fixed" value="다같이 (사도신경)"></div>
+      </div>
+      <div class="row">
+        <div class="fg"><label>찬양인도</label><input type="text" id="f-praise" placeholder="이름"></div>
+        <div class="fg"><label>반주</label><input type="text" id="f-accompany" placeholder="이름"></div>
+        <div class="fg"><label>대표기도</label><input type="text" id="f-prayer" placeholder="이름"></div>
+      </div>
+      <div class="row">
+        <div class="fg"><label>말씀</label><input type="text" id="f-word" placeholder="성경 구절"></div>
+        <div class="fg"><label>설교</label><input type="text" id="f-sermon" class="fixed" value="엄태우 목사"></div>
+        <div class="fg"><label>설교주제</label><input type="text" id="f-topic" placeholder="설교 주제"></div>
+      </div>
+      <div class="row">
+        <div class="fg"><label>예물 (헌금 위원)</label><input type="text" id="f-offering" placeholder="이름"></div>
+        <div class="fg"><label>봉헌기도</label><input type="text" id="f-offerpray" class="fixed" value="엄태우 목사"></div>
+        <div class="fg"><label>축복기도</label><input type="text" id="f-bless" class="fixed" value="엄태우 목사"></div>
+      </div>
+
+      <div class="sec">참석자 명단</div>
+      <div class="row">
+        <div class="fg">
+          <label>현장 참석자 <span id="cnt-on" style="color:#1a3a5c;">(0명)</span></label>
+          <textarea id="f-onsite" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+        </div>
+        <div class="fg">
+          <label>온라인 참석자 <span id="cnt-ol" style="color:#1a3a5c;">(0명)</span></label>
+          <textarea id="f-online" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+        </div>
+        <div class="fg">
+          <label>방문자 <span id="cnt-vi" style="color:#1a3a5c;">(0명)</span></label>
+          <textarea id="f-visitor" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+        </div>
+      </div>
+      <div class="sum-box">
+        인원 합계 — 현장: <span id="s-on">0</span>명 &nbsp;/&nbsp; 온라인: <span id="s-ol">0</span>명 &nbsp;/&nbsp; 총: <span id="s-tot">0</span>명
+      </div>
+
+      <div class="act-row">
+        <button class="btn btn-sub" onclick="resetForm()">초기화</button>
+        <button class="btn btn-primary" onclick="saveRecord()">💾 저장</button>
+        <button class="btn btn-print" onclick="openPrintModal(null)">🖨️ 인쇄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 목록 탭 -->
+  <div id="tab-list" style="display:none;">
+    <div class="card" style="padding:0;overflow:hidden;" id="list-container">
+      <div class="loading">불러오는 중...</div>
+    </div>
+  </div>
+
+  <!-- 상세 탭 -->
+  <div id="tab-detail" style="display:none;">
+    <div class="act-row" style="margin-bottom:12px;">
+      <button class="btn btn-back" onclick="showTab('list')">← 목록</button>
+      <button class="btn btn-edit" onclick="editRecord()">✏️ 수정</button>
+      <button class="btn btn-danger" onclick="deleteRecord()">🗑️ 삭제</button>
+      <button class="btn btn-print" onclick="openPrintModal(currentDetailId)">🖨️ 인쇄</button>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- 인쇄 모달 -->
+  <div class="modal-bg" id="print-modal">
+    <div class="modal">
+      <h3>🖨️ 인쇄 / PDF 저장</h3>
+      <p>아래 버튼을 누르면 인쇄 화면이 열립니다.</p>
+      <p><strong>📱 모바일:</strong> 인쇄 화면에서 <strong>「PDF로 저장」</strong>을 선택하세요.</p>
+      <p><strong>💡 팁:</strong> 인쇄 설정에서 <strong>「배경 그래픽 포함」</strong>을 체크하면 회색 셀이 정확히 출력됩니다.</p>
+      <div class="modal-btns">
+        <button class="btn btn-sub" onclick="closePrintModal()">취소</button>
+        <button class="btn btn-primary" onclick="doPrint()">인쇄 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="print-area"></div>
+</div>
+
+<script>
+let currentPart = 1;
+let currentDetailId = null;
+let records = [];
+let pendingPrintId = null;
+const partTimes = {1:'09:00', 2:'11:20', 3:'15:30'};
+
+/* ── DB 준비 대기 ── */
+function waitDB(fn) {
+  if (window._dbReady) fn();
+  else document.addEventListener('db-ready', fn, {once:true});
+}
+
+/* ── 초기화 ── */
+function init() {
+  setToday();
+  document.getElementById('f-time').value = '09:00';
+}
+
+function setToday() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  document.getElementById('f-date').value = `${y}-${m}-${dd}`;
+}
+
+function setPart(n) {
+  currentPart = n;
+  document.querySelectorAll('.part-btn').forEach((b,i) => b.classList.toggle('active', i===n-1));
+  document.getElementById('f-time').value = partTimes[n];
+}
+
+/* ── 이름 파싱 ── */
+function parseNames(s) {
+  if (!s||!s.trim()) return [];
+  return s.split(/[,\n，、]/).map(x=>x.trim()).filter(x=>x.length>0);
+}
+function countN() {
+  const on=parseNames(document.getElementById('f-onsite').value);
+  const ol=parseNames(document.getElementById('f-online').value);
+  const vi=parseNames(document.getElementById('f-visitor').value);
+  document.getElementById('cnt-on').textContent=`(${on.length}명)`;
+  document.getElementById('cnt-ol').textContent=`(${ol.length}명)`;
+  document.getElementById('cnt-vi').textContent=`(${vi.length}명)`;
+  document.getElementById('s-on').textContent=on.length+vi.length;
+  document.getElementById('s-ol').textContent=ol.length;
+  document.getElementById('s-tot').textContent=on.length+ol.length+vi.length;
+}
+
+/* ── 탭 ── */
+function showTab(t) {
+  ['write','list','detail'].forEach(id =>
+    document.getElementById('tab-'+id).style.display = id===t?'block':'none'
+  );
+  document.querySelectorAll('.tab-btn').forEach((b,i) =>
+    b.classList.toggle('active', (i===0&&t==='write')||(i===1&&(t==='list'||t==='detail')))
+  );
+  if (t==='list') renderList();
+}
+
+/* ── 폼 수집 ── */
+function collectForm() {
+  return {
+    part: currentPart,
+    date: document.getElementById('f-date').value,
+    time: document.getElementById('f-time').value,
+    writer: document.getElementById('f-writer').value,
+    call: document.getElementById('f-call').value,
+    creed: document.getElementById('f-creed').value,
+    praise: document.getElementById('f-praise').value,
+    accompany: document.getElementById('f-accompany').value,
+    prayer: document.getElementById('f-prayer').value,
+    word: document.getElementById('f-word').value,
+    sermon: document.getElementById('f-sermon').value,
+    topic: document.getElementById('f-topic').value,
+    offering: document.getElementById('f-offering').value,
+    offerpray: document.getElementById('f-offerpray').value,
+    bless: document.getElementById('f-bless').value,
+    onsite: parseNames(document.getElementById('f-onsite').value),
+    online: parseNames(document.getElementById('f-online').value),
+    visitor: parseNames(document.getElementById('f-visitor').value),
+    createdAt: Date.now()
+  };
+}
+
+function fillForm(r) {
+  setPart(r.part);
+  ['date','time','writer','call','creed','praise','accompany','prayer','word','sermon','topic','offering','offerpray','bless'].forEach(k => {
+    const el = document.getElementById('f-'+k);
+    if (el) el.value = r[k]||'';
+  });
+  document.getElementById('f-onsite').value=(r.onsite||[]).join('\n');
+  document.getElementById('f-online').value=(r.online||[]).join('\n');
+  document.getElementById('f-visitor').value=(r.visitor||[]).join('\n');
+  countN();
+}
+
+function resetForm() {
+  document.querySelectorAll('#tab-write input,#tab-write textarea').forEach(el=>{
+    if(!el.classList.contains('fixed')) el.value='';
+  });
+  document.getElementById('f-call').value='다같이';
+  document.getElementById('f-creed').value='다같이 (사도신경)';
+  document.getElementById('f-sermon').value='엄태우 목사';
+  document.getElementById('f-offerpray').value='엄태우 목사';
+  document.getElementById('f-bless').value='엄태우 목사';
+  setToday(); setPart(1); countN();
+}
+
+/* ── Firebase CRUD ── */
+async function saveRecord() {
+  const r = collectForm();
+  if (!r.date) { alert('날짜를 입력해주세요.'); return; }
+  waitDB(async () => {
+    try {
+      await window._fns.addDoc(window._col, r);
+      alert('저장되었습니다!');
+      showTab('list');
+    } catch(e) { alert('저장 실패: '+e.message); }
+  });
+}
+
+async function loadRecords() {
+  return new Promise(resolve => {
+    waitDB(async () => {
+      try {
+        const q = window._fns.query(window._col, window._fns.orderBy('createdAt','desc'));
+        const snap = await window._fns.getDocs(q);
+        records = snap.docs.map(d => ({...d.data(), _id: d.id}));
+        resolve(records);
+      } catch(e) { records=[]; resolve([]); }
+    });
+  });
+}
+
+async function deleteRecord() {
+  if (!confirm('삭제하시겠습니까?')) return;
+  waitDB(async () => {
+    try {
+      await window._fns.deleteDoc(window._fns.doc(window._db, 'records', currentDetailId));
+      showTab('list');
+    } catch(e) { alert('삭제 실패: '+e.message); }
+  });
+}
+
+/* ── 목록 렌더 ── */
+function fmtDate(d) {
+  if(!d) return '';
+  const [y,m,dd]=d.split('-');
+  return `${y}년 ${m}월 ${dd}일`;
+}
+
+async function renderList() {
+  const c = document.getElementById('list-container');
+  c.innerHTML = '<div class="loading">불러오는 중...</div>';
+  await loadRecords();
+  if (!records.length) { c.innerHTML='<div class="list-empty">저장된 일지가 없습니다.</div>'; return; }
+  c.innerHTML = records.map(r=>`
+    <div class="list-item" onclick="openDetail('${r._id}')">
+      <div>
+        <div class="li-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
+        <div class="li-meta">${fmtDate(r.date)} · 작성자: ${r.writer||'-'} · 현장 ${(r.onsite||[]).length+(r.visitor||[]).length}명 / 온라인 ${(r.online||[]).length}명</div>
+      </div>
+      <div class="li-arr">›</div>
+    </div>`).join('');
+}
+
+/* ── 상세 ── */
+function openDetail(id) {
+  currentDetailId = id;
+  const r = records.find(x=>x._id===id);
+  if (!r) return;
+  document.getElementById('detail-content').innerHTML = buildPF(r);
+  showTab('detail');
+}
+
+function editRecord() {
+  const r = records.find(x=>x._id===currentDetailId);
+  if (!r) return;
+  fillForm(r);
+  showTab('write');
+}
+
+/* ── 인쇄 ── */
+function openPrintModal(id) { pendingPrintId=id; document.getElementById('print-modal').classList.add('open'); }
+function closePrintModal() { document.getElementById('print-modal').classList.remove('open'); }
+
+function doPrint() {
+  closePrintModal();
+  const r = pendingPrintId===null ? collectForm() : records.find(x=>x._id===pendingPrintId);
+  if (!r) return;
+  const area = document.getElementById('print-area');
+  area.innerHTML = buildPF(r);
+  area.style.display = 'block';
+  setTimeout(()=>{ window.print(); setTimeout(()=>{ area.style.display='none'; },500); }, 200);
+}
+
+/* ══ 인쇄 양식 빌더 ══ */
+function buildPF(r) {
+  const on=r.onsite||[], ol=r.online||[], vi=r.visitor||[];
+  const totOn=on.length+vi.length, totOl=ol.length, tot=totOn+totOl;
+
+  let dateStr='년    월    일', timeStr='오전      시';
+  if(r.date){const[y,mo,d]=r.date.split('-');dateStr=`${y}년 ${mo}월 ${d}일`;}
+  if(r.time){
+    let[h,m]=r.time.split(':'); h=parseInt(h);
+    const ap=h<12?'오전':'오후';
+    const hh=h===0?12:h>12?h-12:h;
+    timeStr=`${ap} ${hh}시 ${String(m).padStart(2,'0')}분`;
+  }
+
+  function fmtNames(arr,per=6){
+    if(!arr.length) return '　';
+    const rows=[];
+    for(let i=0;i<arr.length;i+=per) rows.push(arr.slice(i,i+per).join('　 '));
+    return rows.join('<br>');
+  }
+
+  const onsiteBlock = (on.length||vi.length)
+    ? fmtNames(on)+(vi.length?`<br><span style="font-size:11px;color:#444;">[방문] ${vi.join('　 ')}</span>`:'')
+    : '　';
+  const onlineBlock = ol.length ? fmtNames(ol) : '　';
+
+  return `
+<div class="pf-title">신촌연합교회&nbsp;&nbsp;주일예배일지&nbsp;&nbsp;(${r.part}부)</div>
+<table class="pf-head">
+  <tr>
+    <td class="h-lbl">일시</td>
+    <td class="h-val">${dateStr}&nbsp;&nbsp;${timeStr}</td>
+    <td class="h-lbl" style="border-left:1px solid #666;">작성자</td>
+    <td class="h-val" style="width:130px;">${r.writer||''}</td>
+  </tr>
+</table>
+<table class="pf-body">
+  <tr><td class="lbl">예배의 부름</td><td class="val">${r.call||'다같이'}</td></tr>
+  <tr><td class="lbl">신앙고백</td><td class="val">${r.creed||'다같이 (사도신경)'}</td></tr>
+  <tr><td class="lbl">찬양인도</td><td class="val">${r.praise||'　'}</td></tr>
+  <tr><td class="lbl">반주</td><td class="val">${r.accompany||'　'}</td></tr>
+  <tr><td class="lbl">대표기도</td><td class="val">${r.prayer||'　'}</td></tr>
+  <tr><td class="lbl">말씀</td><td class="val">${r.word||'　'}</td></tr>
+  <tr><td class="lbl">설교</td><td class="val">${r.sermon||'엄태우 목사'}</td></tr>
+<tr><td class="lbl">설교주제</td><td class="val">${r.topic||'　'}</td></tr>
+  <tr><td class="lbl">예물</td><td class="val">헌금 위원 : ${r.offering||''}</td></tr>
+  <tr><td class="lbl">봉헌기도</td><td class="val">${r.offerpray||'엄태우 목사'}</td></tr>
+  <tr><td class="lbl">축복기도</td><td class="val">${r.bless||'엄태우 목사'}</td></tr>
+</table>
+<table class="pf-att">
+  <tr>
+    <td class="att-lbl" rowspan="2">참석자명단</td>
+    <td style="background:#fff;border:1px solid #777;padding:7px 10px;vertical-align:top;font-size:12px;">
+      <div class="att-sec">&lt;현장&gt;</div>
+      <div style="min-height:110px;padding:3px 0;line-height:1.9;">${onsiteBlock}</div>
+    </td>
+  </tr>
+  <tr>
+    <td style="background:#fff;border:1px solid #777;padding:7px 10px;vertical-align:top;font-size:12px;">
+      <div class="att-sec">&lt;온라인&gt;</div>
+      <div style="min-height:50px;padding:3px 0;line-height:1.9;">${onlineBlock}</div>
+    </td>
+  </tr>
+</table>
+<table class="pf-tot">
+  <tr>
+    <td class="tot-lbl">참석자 인원합계</td>
+    <td class="tot-val">
+      현장&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totOn}&nbsp;명<br>
+      온라인&nbsp;&nbsp;&nbsp;${totOl}&nbsp;명<br>
+      총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}&nbsp;명
+    </td>
+  </tr>
+</table>`;
+}
+
+init();
+</script>
+</body>
+</html>
