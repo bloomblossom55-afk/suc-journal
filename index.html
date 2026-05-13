@@ -82,7 +82,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 #print-area{display:none;}
 @media(max-width:600px){.row{flex-direction:column;}.fg{min-width:unset;}}
 
-/* 상세보기 미리보기 (인쇄 양식 재사용) */
 .pf-wrap{width:100%;font-family:'맑은 고딕','Malgun Gothic',sans-serif;font-size:13px;color:#000;}
 .pf-title{text-align:center;font-size:18px;font-weight:800;padding:0 0 28px;letter-spacing:1px;}
 .pf-head{width:100%;border-collapse:collapse;border:1.5px solid #000;margin-bottom:10px;table-layout:fixed;}
@@ -111,7 +110,7 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 <body>
 <div id="app">
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('write')">✏️ 일지 작성</button>
+    <button class="tab-btn active" onclick="showTab('write', true)">✏️ 일지 작성</button>
     <button class="tab-btn" onclick="showTab('list')">📋 저장된 일지</button>
   </div>
 
@@ -255,7 +254,9 @@ function countN() {
   document.getElementById('s-ol').textContent=ol.length;
   document.getElementById('s-tot').textContent=on.length+ol.length+vi.length;
 }
-function showTab(t) {
+
+/* fromTab: true면 탭 버튼에서 직접 클릭 → 항상 초기화 */
+function showTab(t, fromTab) {
   ['write','list','detail'].forEach(id =>
     document.getElementById('tab-'+id).style.display = id===t?'block':'none'
   );
@@ -263,7 +264,10 @@ function showTab(t) {
     b.classList.toggle('active',(i===0&&t==='write')||(i===1&&(t==='list'||t==='detail')))
   );
   if (t==='list') renderList();
+  // 탭 버튼으로 '일지 작성' 클릭 시 → 항상 초기화 (수정 모드 해제)
+  if (t==='write' && fromTab) resetForm();
 }
+
 function collectForm() {
   return {
     part: currentPart,
@@ -383,9 +387,11 @@ function openDetail(id) {
   showTab('detail');
 }
 function editRecord() {
+  // 수정 버튼에서만 currentDetailId 유지하며 폼으로 이동
   const r=records.find(x=>x._id===currentDetailId);
   if(!r) return;
-  fillForm(r); showTab('write');
+  fillForm(r);
+  showTab('write'); // fromTab 없음 → 초기화 안 함
 }
 function openPrintModal(id){ pendingPrintId=id; document.getElementById('print-modal').classList.add('open'); }
 function closePrintModal(){ document.getElementById('print-modal').classList.remove('open'); }
@@ -402,14 +408,12 @@ function doPrint() {
   setTimeout(()=>URL.revokeObjectURL(url), 15000);
 }
 
-/* 이름 12명씩 줄바꿈 */
-function chunkNames(arr, size=12) {
+function chunkNames(arr, size=9) {
   const rows=[];
   for(let i=0;i<arr.length;i+=size) rows.push(arr.slice(i,i+size).join('  '));
   return rows.join('\n');
 }
 
-/* 독립 인쇄 페이지 */
 function buildPageHTML(r) {
   const pfContent = buildPF(r);
   return `<!DOCTYPE html>
@@ -419,85 +423,55 @@ function buildPageHTML(r) {
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>신촌연합교회 주일예배일지 (${r.part}부)</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
-/* RIDIBatang — CDN */
-@font-face {
-  font-family: 'RIDIBatang';
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/ridibatang/RIDIBatang.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/webfontworld/ridibatang/RIDIBatang.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-:root{
-  --  font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
-
-}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{
-  width:210mm;
-  font-family:var(--font);
+  font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
   background:#fff;color:#000;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   text-rendering:optimizeLegibility;
 }
-body{padding:10mm 12mm 8mm;}
+body{padding:10mm 13mm 8mm;}
+.pf-wrap{width:100%;}
+.pf-title{text-align:center;font-size:20pt;font-weight:800;padding:0 0 20px;letter-spacing:1px;}
 
-/* 제목 */
-.pf-title{
-  text-align:center;font-size:20pt;font-weight:800;
-  padding:0 0 12px;letter-spacing:1px;
-}
+/* 4개 테이블 — 겹침 없이 연결 */
+.pf-wrap table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.pf-wrap td{font-size:11pt;vertical-align:middle;word-break:keep-all;padding:5px 10px;}
 
-:root{ --lbl-w:90px; }
+.t-head{border:1.5px solid #333;}
+.t-head td{border:1px solid #888;}
 
-/* 일시/작성자 */
-.pf-head{width:100%;border-collapse:collapse;border:1.5px solid #000;margin-bottom:10px;table-layout:fixed;}
-.pf-head td{padding:6px 10px;font-size:11pt;vertical-align:middle;border:1px solid #777;}
-.h-lbl{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:var(--lbl-w);}
-.h-val{background:#fff;}
-.h-lbl2{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:var(--lbl-w);border-left:1px solid #777;}
-.h-val2{background:#fff;width:100px;}
+.t-body{border:1.5px solid #333;border-top:none;}
+.t-body td{border-right:1px solid #888;border-bottom:1px solid #888;border-left:1px solid #888;border-top:none;}
+.t-body tr:first-child td{border-top:1px solid #888;}
 
-/* 예배순서 */
-.pf-body{width:100%;border-collapse:collapse;border:1.5px solid #000;table-layout:fixed;}
-.pf-body td{padding:5px 10px;font-size:11pt;vertical-align:middle;border:1px solid #777;word-break:keep-all;}
-.lbl{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:var(--lbl-w);}
+.t-att{border:1.5px solid #333;border-top:none;}
+.t-att td{border-right:1px solid #888;border-bottom:1px solid #888;border-left:1px solid #888;border-top:none;}
+.t-att tr:first-child td{border-top:1px solid #888;}
+
+.t-tot{border:1.5px solid #333;border-top:none;}
+.t-tot td{border-right:1px solid #888;border-bottom:1px solid #888;border-left:1px solid #888;border-top:none;}
+.t-tot tr:first-child td{border-top:1px solid #888;}
+
+.lbl{background:#e8e8e8 !important;font-weight:700;text-align:center;width:86px;white-space:nowrap;}
 .val{background:#fff;}
-
-/* 참석자명단 */
-.pf-att{width:100%;border-collapse:collapse;border:1.5px solid #000;border-bottom:none;table-layout:fixed;}
-.pf-att td{border:1px solid #777;}
-.att-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  width:var(--lbl-w);padding:8px 4px;word-break:keep-all;}
-.att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:10.5pt;line-height:1.85;}
+.att-val{background:#fff;vertical-align:top !important;padding:8px 12px !important;line-height:1.85;font-size:10.5pt;}
 .att-sec{font-weight:700;margin-top:8px;font-size:11pt;}
 .att-sec:first-child{margin-top:0;}
 .att-names{white-space:pre-wrap;word-break:keep-all;margin-top:2px;}
-
-/* 인원합계 */
-.pf-tot{width:100%;border-collapse:collapse;border:1.5px solid #000;border-top:1px solid #777;table-layout:fixed;}
-.pf-tot td{border:1px solid #777;}
-.tot-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  width:var(--lbl-w);padding:6px 4px;line-height:1.6;word-break:keep-all;}
-.tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:11pt;}
+.tot-val{background:#fff;vertical-align:top !important;padding:7px 12px !important;line-height:2;font-size:11pt;}
 
 @media print{
-  @page{
-    size:A4 portrait;
-    margin:10mm 12mm;
-  }
-  html,body{width:auto;}
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  @page{size:A4 portrait;margin:10mm 13mm;}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
 }
 </style>
 </head>
 <body>
 ${pfContent}
 <script>
-  // 폰트 로드 후 인쇄 (최대 3초 대기)
-  var t=setTimeout(function(){window.print();},3000);
+  var t=setTimeout(function(){window.print();},2500);
   document.fonts.ready.then(function(){clearTimeout(t);window.print();});
 <\/script>
 </body>
@@ -507,72 +481,68 @@ ${pfContent}
 function buildPF(r) {
   const on=r.onsite||[], ol=r.online||[], vi=r.visitor||[];
   const totOn=on.length+vi.length, totOl=ol.length, tot=totOn+totOl;
-
   let dateStr='년    월    일', timeStr='';
-  if(r.date){
-    const[y,mo,d]=r.date.split('-');
-    dateStr=`${y}년 ${parseInt(mo)}월 ${parseInt(d)}일`;
-  }
+  if(r.date){const[y,mo,d]=r.date.split('-');dateStr=`${y}년 ${parseInt(mo)}월 ${parseInt(d)}일`;}
   if(r.time){
     let[h,m]=r.time.split(':'); h=parseInt(h);
     const ap=h<12?'오전':'오후';
     const hh=h===0?12:h>12?h-12:h;
     timeStr=` ${ap} ${hh}시${m!=='00'?' '+m+'분':''}`;
   }
-
-  // 9명씩 줄바꿈, 콤마 없음
-  const onsiteStr  = chunkNames(on,9);
-  const onlineStr  = chunkNames(ol,9);
-  const visitorStr = chunkNames(vi,9);
+  const onsiteStr=chunkNames(on,9);
+  const onlineStr=chunkNames(ol,9);
+  const visitorStr=chunkNames(vi,9);
 
   return `
-<div class="pf-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
-
-<table class="pf-head">
-  <tr>
-    <td class="h-lbl">일시</td>
-    <td class="h-val">${dateStr}${timeStr}</td>
-    <td class="h-lbl2">작성자</td>
-    <td class="h-val2">${r.writer||''}</td>
-  </tr>
-</table>
-
-<table class="pf-body">
-  <tr><td class="lbl">예배의 부름</td><td class="val">${r.call||'다같이'}</td></tr>
-  <tr><td class="lbl">신앙고백</td><td class="val">${r.creed||'다같이 (사도신경)'}</td></tr>
-  <tr><td class="lbl">찬양인도</td><td class="val">${r.praise||''}</td></tr>
-  <tr><td class="lbl">반주</td><td class="val">${r.accompany||'정은정 집사'}</td></tr>
-  <tr><td class="lbl">대표기도</td><td class="val">${r.prayer||''}</td></tr>
-  <tr><td class="lbl">말씀</td><td class="val">${r.word||''}</td></tr>
-  <tr><td class="lbl">설교</td><td class="val">${r.sermon||'엄태우 목사'}</td></tr>
-  <tr><td class="lbl">설교주제</td><td class="val">${r.topic||''}</td></tr>
-  <tr><td class="lbl">예물</td><td class="val">${r.offering||''}</td></tr>
-  <tr><td class="lbl">봉헌기도</td><td class="val">${r.offerpray||'엄태우 목사'}</td></tr>
-  <tr><td class="lbl">축복기도</td><td class="val">${r.bless||'엄태우 목사'}</td></tr>
-</table>
-
-<table class="pf-att">
-  <tr>
-    <td class="att-lbl">참석자명단</td>
-    <td class="att-val">
-      ${on.length?`<div class="att-sec">&lt;현장&gt;</div><div class="att-names" style="margin-bottom:8px;">${onsiteStr}</div>`:''}
-      ${ol.length?`<div class="att-sec">&lt;온라인&gt;</div><div class="att-names" style="margin-bottom:8px;">${onlineStr}</div>`:''}
-      ${vi.length?`<div class="att-sec">&lt;방문자&gt;</div><div class="att-names">${visitorStr}</div>`:''}
-      ${!on.length&&!ol.length&&!vi.length?'　':''}
-    </td>
-  </tr>
-</table>
-
-<table class="pf-tot">
-  <tr>
-    <td class="tot-lbl">참석자<br>인원합계</td>
-    <td class="tot-val">
-      현장&nbsp;&nbsp;&nbsp;${totOn}명<br>
-      온라인&nbsp;${totOl}명<br>
-      총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}명
-    </td>
-  </tr>
-</table>`;
+<div class="pf-wrap">
+  <div class="pf-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
+  <table class="t-head">
+    <colgroup><col style="width:86px"><col><col style="width:52px"><col style="width:100px"></colgroup>
+    <tr>
+      <td class="lbl">일시</td>
+      <td class="val">${dateStr}${timeStr}</td>
+      <td class="lbl">작성자</td>
+      <td class="val">${r.writer||''}</td>
+    </tr>
+  </table>
+  <table class="t-body">
+    <colgroup><col style="width:86px"><col></colgroup>
+    <tr><td class="lbl">예배의 부름</td><td class="val">${r.call||'다같이'}</td></tr>
+    <tr><td class="lbl">신앙고백</td><td class="val">${r.creed||'다같이 (사도신경)'}</td></tr>
+    <tr><td class="lbl">찬양인도</td><td class="val">${r.praise||''}</td></tr>
+    <tr><td class="lbl">반주</td><td class="val">${r.accompany||'정은정 집사'}</td></tr>
+    <tr><td class="lbl">대표기도</td><td class="val">${r.prayer||''}</td></tr>
+    <tr><td class="lbl">말씀</td><td class="val">${r.word||''}</td></tr>
+    <tr><td class="lbl">설교</td><td class="val">${r.sermon||'엄태우 목사'}</td></tr>
+    <tr><td class="lbl">설교주제</td><td class="val">${r.topic||''}</td></tr>
+    <tr><td class="lbl">예물</td><td class="val">${r.offering||''}</td></tr>
+    <tr><td class="lbl">봉헌기도</td><td class="val">${r.offerpray||'엄태우 목사'}</td></tr>
+    <tr><td class="lbl">축복기도</td><td class="val">${r.bless||'엄태우 목사'}</td></tr>
+  </table>
+  <table class="t-att">
+    <colgroup><col style="width:86px"><col></colgroup>
+    <tr>
+      <td class="lbl" style="vertical-align:top;padding-top:10px;">참석자명단</td>
+      <td class="att-val">
+        ${on.length?`<div class="att-sec">&lt;현장&gt;</div><div class="att-names" style="margin-bottom:8px;">${onsiteStr}</div>`:''}
+        ${ol.length?`<div class="att-sec">&lt;온라인&gt;</div><div class="att-names" style="margin-bottom:8px;">${onlineStr}</div>`:''}
+        ${vi.length?`<div class="att-sec">&lt;방문자&gt;</div><div class="att-names">${visitorStr}</div>`:''}
+        ${!on.length&&!ol.length&&!vi.length?'　':''}
+      </td>
+    </tr>
+  </table>
+  <table class="t-tot">
+    <colgroup><col style="width:86px"><col></colgroup>
+    <tr>
+      <td class="lbl" style="line-height:1.6;">참석자<br>인원합계</td>
+      <td class="tot-val">
+        현장&nbsp;&nbsp;&nbsp;${totOn}명<br>
+        온라인&nbsp;${totOl}명<br>
+        총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}명
+      </td>
+    </tr>
+  </table>
+</div>`;
 }
 
 init();
