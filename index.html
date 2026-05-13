@@ -273,7 +273,19 @@ function setPart(n) {
 
 function parseNames(s) {
   if (!s||!s.trim()) return [];
-  return s.split(/[,\n，、]/).map(x=>x.trim()).filter(x=>x.length>0);
+  // 괄호로 묶인 이름을 먼저 추출 후 플레이스홀더로 치환
+  const bracketed = [];
+  s = s.replace(/\(([^)]+)\)/g, (_, inner) => {
+    bracketed.push(inner.trim());
+    return `__NAME${bracketed.length-1}__`;
+  });
+  // 콤마, 줄바꿈, 1칸 이상 공백으로 구분
+  const parts = s.split(/[,\n，、]+|\s+/).map(x=>x.trim()).filter(x=>x.length>0);
+  // 플레이스홀더 복원
+  return parts.map(x => {
+    const m = x.match(/^__NAME(\d+)__$/);
+    return m ? bracketed[parseInt(m[1])] : x;
+  });
 }
 
 function countN() {
