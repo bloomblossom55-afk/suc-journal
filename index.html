@@ -84,7 +84,7 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 
 /* 상세보기 미리보기 (인쇄 양식 재사용) */
 .pf-wrap{width:100%;font-family:'맑은 고딕','Malgun Gothic',sans-serif;font-size:13px;color:#000;}
-.pf-title{text-align:center;font-size:18px;font-weight:800;padding:0 0 14px;letter-spacing:1px;}
+.pf-title{text-align:center;font-size:18px;font-weight:800;padding:0 0 28px;letter-spacing:1px;}
 .pf-head{width:100%;border-collapse:collapse;border:1.5px solid #000;margin-bottom:10px;table-layout:fixed;}
 .pf-head td{padding:6px 10px;font-size:13px;vertical-align:middle;border:1px solid #777;}
 .h-lbl{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:82px;}
@@ -95,17 +95,17 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .pf-body td{padding:5px 10px;font-size:13px;vertical-align:middle;border:1px solid #777;word-break:keep-all;}
 .lbl{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:82px;}
 .val{background:#fff;}
-.pf-att{width:100%;border-collapse:collapse;border:1.5px solid #000;border-bottom:none;table-layout:fixed;}
+.pf-att{width:100%;border-collapse:collapse;border:1px solid #777;border-bottom:none;table-layout:fixed;}
 .pf-att td{border:1px solid #777;}
-.att-lbl{background:#e8e8e8;font-weight:700;font-size:13px;text-align:center;vertical-align:middle;width:82px;padding:8px 4px;word-break:keep-all;}
-.att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:13px;line-height:1.85;}
+.att-lbl{background:#e8e8e8;font-weight:700;font-size:13px;text-align:center;vertical-align:middle;width:82px;padding:8px 4px;word-break:keep-all;border:1px solid #777;}
+.att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:13px;line-height:1.85;border:1px solid #777;}
 .att-sec{font-weight:700;margin-top:8px;font-size:13px;}
 .att-sec:first-child{margin-top:0;}
 .att-names{white-space:pre-wrap;word-break:keep-all;margin-top:2px;}
-.pf-tot{width:100%;border-collapse:collapse;border:1.5px solid #000;border-top:1px solid #777;table-layout:fixed;}
+.pf-tot{width:100%;border-collapse:collapse;border:1px solid #777;table-layout:fixed;}
 .pf-tot td{border:1px solid #777;}
-.tot-lbl{background:#e8e8e8;font-weight:700;font-size:13px;text-align:center;vertical-align:middle;width:82px;padding:6px 4px;line-height:1.6;word-break:keep-all;}
-.tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:13px;}
+.tot-lbl{background:#e8e8e8;font-weight:700;font-size:13px;text-align:center;vertical-align:middle;width:82px;padding:6px 4px;line-height:1.6;word-break:keep-all;border:1px solid #777;}
+.tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:13px;border:1px solid #777;}
 </style>
 </head>
 <body>
@@ -466,21 +466,21 @@ body{padding:10mm 12mm 8mm;}
 .val{background:#fff;}
 
 /* 참석자명단 */
-.pf-att{width:100%;border-collapse:collapse;border:1.5px solid #000;border-bottom:none;table-layout:fixed;}
+.pf-att{width:100%;border-collapse:collapse;border:1px solid #777;border-bottom:none;table-layout:fixed;}
 .pf-att td{border:1px solid #777;}
 .att-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  width:var(--lbl-w);padding:8px 4px;word-break:keep-all;}
-.att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:10.5pt;line-height:1.85;}
+  width:var(--lbl-w);padding:8px 4px;word-break:keep-all;border:1px solid #777;}
+.att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:10.5pt;line-height:1.85;border:1px solid #777;}
 .att-sec{font-weight:700;margin-top:8px;font-size:11pt;}
 .att-sec:first-child{margin-top:0;}
 .att-names{white-space:pre-wrap;word-break:keep-all;margin-top:2px;}
 
 /* 인원합계 */
-.pf-tot{width:100%;border-collapse:collapse;border:1.5px solid #000;border-top:1px solid #777;table-layout:fixed;}
+.pf-tot{width:100%;border-collapse:collapse;border:1px solid #777;table-layout:fixed;}
 .pf-tot td{border:1px solid #777;}
 .tot-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  width:var(--lbl-w);padding:6px 4px;line-height:1.6;word-break:keep-all;}
-.tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:11pt;}
+  width:var(--lbl-w);padding:6px 4px;line-height:1.6;word-break:keep-all;border:1px solid #777;}
+.tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:11pt;border:1px solid #777;}
 
 @media print{
   @page{
@@ -566,8 +566,8 @@ function buildPF(r) {
   <tr>
     <td class="tot-lbl">참석자<br>인원합계</td>
     <td class="tot-val">
-      현장&nbsp;&nbsp;&nbsp;${totOn}명&nbsp;&nbsp;&nbsp;
-      온라인&nbsp;${totOl}명&nbsp;&nbsp;&nbsp;
+      현장&nbsp;&nbsp;&nbsp;${totOn}명<br>
+      온라인&nbsp;${totOl}명<br>
       총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}명
     </td>
   </tr>
