@@ -424,8 +424,7 @@ body{padding:10mm 12mm 8mm;}
   padding:0 0 12px;letter-spacing:1px;
 }
 
-/* 공통 셀 너비 */
-:root{ --lbl-w:82px; }
+:root{ --lbl-w:90px; }
 
 /* 일시/작성자 */
 .pf-head{width:100%;border-collapse:collapse;border:1.5px solid #000;margin-bottom:10px;table-layout:fixed;}
@@ -445,7 +444,7 @@ body{padding:10mm 12mm 8mm;}
 .pf-att{width:100%;border-collapse:collapse;border:1.5px solid #000;border-bottom:none;table-layout:fixed;}
 .pf-att td{border:1px solid #777;}
 .att-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  white-space:nowrap;width:var(--lbl-w);padding:8px 4px;}
+  width:var(--lbl-w);padding:8px 4px;word-break:keep-all;}
 .att-val{background:#fff;vertical-align:top;padding:8px 12px;font-size:10.5pt;line-height:1.85;}
 .att-sec{font-weight:700;margin-top:8px;font-size:11pt;}
 .att-sec:first-child{margin-top:0;}
@@ -455,7 +454,7 @@ body{padding:10mm 12mm 8mm;}
 .pf-tot{width:100%;border-collapse:collapse;border:1.5px solid #000;border-top:1px solid #777;table-layout:fixed;}
 .pf-tot td{border:1px solid #777;}
 .tot-lbl{background:#e8e8e8;font-weight:700;font-size:11pt;text-align:center;vertical-align:middle;
-  white-space:nowrap;width:var(--lbl-w);padding:6px 4px;line-height:1.6;}
+  width:var(--lbl-w);padding:6px 4px;line-height:1.6;word-break:keep-all;}
 .tot-val{background:#fff;vertical-align:middle;padding:7px 12px;line-height:2;font-size:11pt;}
 
 @media print{
@@ -495,10 +494,10 @@ function buildPF(r) {
     timeStr=` ${ap} ${hh}시${m!=='00'?' '+m+'분':''}`;
   }
 
-  // 12명씩 줄바꿈, 콤마 없음
-  const onsiteStr  = chunkNames(on,12);
-  const onlineStr  = chunkNames(ol,12);
-  const visitorStr = chunkNames(vi,12);
+  // 9명씩 줄바꿈, 콤마 없음
+  const onsiteStr  = chunkNames(on,9);
+  const onlineStr  = chunkNames(ol,9);
+  const visitorStr = chunkNames(vi,9);
 
   return `
 <div class="pf-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
