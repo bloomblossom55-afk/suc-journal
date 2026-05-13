@@ -82,53 +82,114 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .modal-btns{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
 .modal-btns .btn{flex:1;}
 
-/* ══════════════════════
-   인쇄 양식
-══════════════════════ */
-.pf-wrap{width:100%;font-family:'맑은 고딕','Malgun Gothic',sans-serif;font-size:13px;color:#000;}
+/* ══ 인쇄 양식 ══ */
+.pf-wrap{
+  width:100%;
+  font-family:'맑은 고딕','Malgun Gothic',sans-serif;
+  font-size:13px;color:#000;
+}
+.pf-title{
+  text-align:center;
+  font-size:23px;
+  font-weight:900;
+  padding:20px 10px 20px;
+  letter-spacing:1px;
+}
+/* 일시/작성자 — 독립 테이블 */
+.pf-head{
+  width:100%;
+  border-collapse:collapse;
+  border:1.5px solid #000;
+  margin-bottom:16px;
+  table-layout:fixed;
+}
+.pf-head td{
+  padding:9px 14px;
+  font-size:13px;
+  vertical-align:middle;
+  border:1px solid #666;
+}
+.h-lbl{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:55px;}
+.h-val{background:#fff;}
+.h-lbl2{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:55px;}
+.h-val2{background:#fff;width:130px;}
 
-/* 제목 */
-.pf-title{text-align:center;font-size:22px;font-weight:900;padding:16px 10px 14px;letter-spacing:1px;border:none;}
-
-/* 전체 테이블 - 하나의 큰 테이블로 통합 */
-.pf-table{width:100%;border-collapse:collapse;border:1.5px solid #000;table-layout:fixed;}
-.pf-table td{border:1px solid #555;padding:6px 10px;vertical-align:middle;font-size:13px;word-break:keep-all;}
-
-/* 라벨 셀 - 고정 너비 */
+/* 예배순서 테이블 */
+.pf-body{
+  width:100%;
+  border-collapse:collapse;
+  border:1.5px solid #000;
+  table-layout:fixed;
+}
+.pf-body td{
+  padding:8px 14px;
+  font-size:13px;
+  vertical-align:middle;
+  border:1px solid #666;
+  word-break:keep-all;
+}
 .lbl{
   background:#e8e8e8;
   font-weight:700;
   text-align:center;
   white-space:nowrap;
-  width:90px;
-  min-width:90px;
-  max-width:90px;
+  width:108px;
+  min-width:108px;
 }
 .val{background:#fff;}
 
-/* 일시/작성자 행 */
-.lbl-date{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:90px;}
-.lbl-writer{background:#e8e8e8;font-weight:700;text-align:center;white-space:nowrap;width:60px;}
-.val-writer{background:#fff;width:120px;}
-
-/* 참석자 명단 */
-.att-val{background:#fff;vertical-align:top;padding:10px 12px;line-height:1.9;font-size:13px;}
-.att-sec{font-weight:700;margin-top:10px;margin-bottom:2px;}
+/* 참석자 + 인원합계 테이블 */
+.pf-att{
+  width:100%;
+  border-collapse:collapse;
+  border:1.5px solid #000;
+  margin-top:0;
+  table-layout:fixed;
+}
+.pf-att td{
+  padding:9px 14px;
+  font-size:13px;
+  border:1px solid #666;
+  word-break:keep-all;
+}
+.att-lbl{
+  background:#e8e8e8;
+  font-weight:700;
+  text-align:center;
+  vertical-align:top;
+  white-space:nowrap;
+  width:108px;
+  min-width:108px;
+  padding-top:12px;
+}
+.att-val{
+  background:#fff;
+  vertical-align:top;
+  line-height:2;
+}
+.att-sec{font-weight:700;margin-top:10px;}
 .att-sec:first-child{margin-top:0;}
-
-/* 인원합계 */
-.tot-lbl{background:#e8e8e8;font-weight:700;text-align:center;vertical-align:middle;white-space:nowrap;width:90px;}
-.tot-val{background:#fff;vertical-align:top;padding:8px 12px;line-height:2;font-size:13px;}
+.tot-lbl{
+  background:#e8e8e8;
+  font-weight:700;
+  text-align:center;
+  vertical-align:middle;
+  white-space:nowrap;
+  width:108px;
+  min-width:108px;
+}
+.tot-val{
+  background:#fff;
+  vertical-align:top;
+  line-height:2.2;
+  padding:10px 14px;
+}
 
 @media print{
   body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   #app>*:not(#print-area){display:none!important;}
   #print-area{display:block!important;}
-  .pf-title{font-size:20px;padding:12px 10px 10px;}
-  .pf-table td{font-size:12px;padding:5px 8px;}
-  .att-val{font-size:12px;}
-  .tot-val{font-size:12px;}
-  @page{size:A4 portrait;margin:10mm 12mm;}
+  @page{size:A4 portrait;margin:12mm 14mm;}
 }
 #print-area{display:none;}
 
@@ -145,7 +206,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
     <button class="tab-btn" onclick="showTab('list')">📋 저장된 일지</button>
   </div>
 
-  <!-- 작성 탭 -->
   <div id="tab-write">
     <div class="card">
       <h2>주일예배 일지 작성</h2>
@@ -185,15 +245,15 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
       <div class="row">
         <div class="fg">
           <label>현장 참석자 <span id="cnt-on" style="color:#1a3a5c;">(0명)</span></label>
-          <textarea id="f-onsite" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+          <textarea id="f-onsite" placeholder="공백·쉼표·줄바꿈으로 구분&#10;공백 포함된 이름은 (홍 길동)처럼 괄호로" oninput="countN()"></textarea>
         </div>
         <div class="fg">
           <label>온라인 참석자 <span id="cnt-ol" style="color:#1a3a5c;">(0명)</span></label>
-          <textarea id="f-online" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+          <textarea id="f-online" placeholder="공백·쉼표·줄바꿈으로 구분" oninput="countN()"></textarea>
         </div>
         <div class="fg">
           <label>방문자 <span id="cnt-vi" style="color:#1a3a5c;">(0명)</span></label>
-          <textarea id="f-visitor" placeholder="쉼표 또는 줄바꿈으로 구분" oninput="countN()"></textarea>
+          <textarea id="f-visitor" placeholder="공백·쉼표·줄바꿈으로 구분" oninput="countN()"></textarea>
         </div>
       </div>
       <div class="sum-box">
@@ -207,14 +267,12 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
     </div>
   </div>
 
-  <!-- 목록 탭 -->
   <div id="tab-list" style="display:none;">
     <div class="card" style="padding:0;overflow:hidden;" id="list-container">
       <div class="loading">불러오는 중...</div>
     </div>
   </div>
 
-  <!-- 상세 탭 -->
   <div id="tab-detail" style="display:none;">
     <div class="act-row" style="margin-bottom:12px;">
       <button class="btn btn-back" onclick="showTab('list')">← 목록</button>
@@ -225,7 +283,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
     <div id="detail-content"></div>
   </div>
 
-  <!-- 인쇄 모달 -->
   <div class="modal-bg" id="print-modal">
     <div class="modal">
       <h3>🖨️ 인쇄 / PDF 저장</h3>
@@ -271,19 +328,17 @@ function setPart(n) {
   document.getElementById('f-time').value = partTimes[n];
 }
 
+/* 이름 파싱: 공백/쉼표/줄바꿈 구분, 괄호 안은 한 명 */
 function parseNames(s) {
   if (!s||!s.trim()) return [];
-  // 괄호로 묶인 이름을 먼저 추출 후 플레이스홀더로 치환
   const bracketed = [];
   s = s.replace(/\(([^)]+)\)/g, (_, inner) => {
     bracketed.push(inner.trim());
-    return `__NAME${bracketed.length-1}__`;
+    return `__N${bracketed.length-1}__`;
   });
-  // 콤마, 줄바꿈, 1칸 이상 공백으로 구분
-  const parts = s.split(/[,\n，、]+|\s+/).map(x=>x.trim()).filter(x=>x.length>0);
-  // 플레이스홀더 복원
+  const parts = s.split(/[\s,\n，、]+/).map(x=>x.trim()).filter(x=>x.length>0);
   return parts.map(x => {
-    const m = x.match(/^__NAME(\d+)__$/);
+    const m = x.match(/^__N(\d+)__$/);
     return m ? bracketed[parseInt(m[1])] : x;
   });
 }
@@ -341,9 +396,9 @@ function fillForm(r) {
     const el = document.getElementById('f-'+k);
     if (el) el.value = r[k]||'';
   });
-  document.getElementById('f-onsite').value=(r.onsite||[]).join('\n');
-  document.getElementById('f-online').value=(r.online||[]).join('\n');
-  document.getElementById('f-visitor').value=(r.visitor||[]).join('\n');
+  document.getElementById('f-onsite').value=(r.onsite||[]).join(' ');
+  document.getElementById('f-online').value=(r.online||[]).join(' ');
+  document.getElementById('f-visitor').value=(r.visitor||[]).join(' ');
   countN();
 }
 
@@ -357,6 +412,7 @@ function resetForm() {
   document.getElementById('f-sermon').value='엄태우 목사';
   document.getElementById('f-offerpray').value='엄태우 목사';
   document.getElementById('f-bless').value='엄태우 목사';
+  currentDetailId = null;
   setToday(); setPart(1); countN();
 }
 
@@ -364,25 +420,25 @@ function resetForm() {
 async function saveRecord() {
   const r = collectForm();
   if (!r.date) { alert('날짜를 입력해주세요.'); return; }
-
   waitDB(async () => {
     try {
       if (currentDetailId) {
-        // 수정 모드: 기존 문서 업데이트 (createdAt 유지)
         const existing = records.find(x => x._id === currentDetailId);
-        r.createdAt = existing ? existing.createdAt : r.createdAt;
+        if (existing) r.createdAt = existing.createdAt;
         await window._fns.updateDoc(
           window._fns.doc(window._db, 'records', currentDetailId), r
         );
         currentDetailId = null;
         alert('수정되었습니다!');
       } else {
-        // 신규 저장
         await window._fns.addDoc(window._col, r);
         alert('저장되었습니다!');
       }
       showTab('list');
-    } catch(e) { alert('저장 실패: '+e.message); }
+    } catch(e) {
+      alert('저장 실패: ' + e.message);
+      console.error(e);
+    }
   });
 }
 
@@ -390,12 +446,21 @@ async function loadRecords() {
   return new Promise(resolve => {
     waitDB(async () => {
       try {
-        // 날짜 내림차순 정렬 (최신순), 날짜 같으면 부수 오름차순
-        const q = window._fns.query(window._col, window._fns.orderBy('date','desc'), window._fns.orderBy('part','asc'));
+        // 단일 필드 정렬만 사용 (복합 인덱스 불필요)
+        const q = window._fns.query(window._col, window._fns.orderBy('createdAt','desc'));
         const snap = await window._fns.getDocs(q);
-        records = snap.docs.map(d => ({...d.data(), _id: d.id}));
+        let recs = snap.docs.map(d => ({...d.data(), _id: d.id}));
+        // 날짜 내림차순 → 같은 날짜면 부수 오름차순 (JS로 정렬)
+        recs.sort((a,b) => {
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          return (a.part||1) - (b.part||1);
+        });
+        records = recs;
         resolve(records);
-      } catch(e) { records=[]; resolve([]); }
+      } catch(e) {
+        console.error(e);
+        records=[]; resolve([]);
+      }
     });
   });
 }
@@ -441,7 +506,6 @@ function openDetail(id) {
 }
 
 function editRecord() {
-  // currentDetailId 유지한 채로 폼으로 이동 (저장 시 updateDoc 호출)
   const r = records.find(x=>x._id===currentDetailId);
   if (!r) return;
   fillForm(r);
@@ -466,76 +530,71 @@ function doPrint() {
   setTimeout(()=>{ window.print(); setTimeout(()=>{ area.style.display='none'; },500); }, 200);
 }
 
-/* ══════════════════════
-   인쇄 양식 빌더
-══════════════════════ */
+/* ══ 인쇄 양식 빌더 ══ */
 function buildPF(r) {
-  const on = r.onsite||[], ol = r.online||[], vi = r.visitor||[];
-  const totOn = on.length + vi.length;
-  const totOl = ol.length;
-  const tot = totOn + totOl;
+  const on=r.onsite||[], ol=r.online||[], vi=r.visitor||[];
+  const totOn=on.length+vi.length, totOl=ol.length, tot=totOn+totOl;
 
-  // 날짜/시간 포맷
-  let dateStr = '년    월    일';
-  let timeStr = '';
-  if (r.date) {
-    const [y,mo,d] = r.date.split('-');
-    dateStr = `${y}년 ${parseInt(mo)}월 ${parseInt(d)}일`;
+  let dateStr='년    월    일', timeStr='';
+  if(r.date){
+    const[y,mo,d]=r.date.split('-');
+    dateStr=`${y}년 ${parseInt(mo)}월 ${parseInt(d)}일`;
   }
-  if (r.time) {
-    let [h,m] = r.time.split(':');
-    h = parseInt(h);
-    const ap = h < 12 ? '오전' : '오후';
-    const hh = h === 0 ? 12 : h > 12 ? h-12 : h;
-    timeStr = `${ap} ${hh}시${m!=='00'?' '+m+'분':''}`;
+  if(r.time){
+    let[h,m]=r.time.split(':'); h=parseInt(h);
+    const ap=h<12?'오전':'오후';
+    const hh=h===0?12:h>12?h-12:h;
+    timeStr=` ${ap} ${hh}시${m!=='00'?' '+m+'분':''}`;
   }
 
-  // 이름 쉼표+공백으로 나열
   const onsiteStr = on.join(', ');
   const onlineStr = ol.join(', ');
   const visitorStr = vi.join(', ');
 
-  const hasAttendee = on.length || ol.length || vi.length;
-
   return `
 <div class="pf-wrap">
   <div class="pf-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
-  <table class="pf-table">
-    <!-- 일시/작성자 -->
+
+  <table class="pf-head">
     <tr>
-      <td class="lbl lbl-date">일시</td>
-      <td class="val" style="width:auto;">${dateStr}${timeStr?' '+timeStr:''}</td>
-      <td class="lbl lbl-writer">작성자</td>
-      <td class="val val-writer">${r.writer||''}</td>
+      <td class="h-lbl">일시</td>
+      <td class="h-val">${dateStr}${timeStr}</td>
+      <td class="h-lbl2">작성자</td>
+      <td class="h-val2">${r.writer||''}</td>
     </tr>
-    <!-- 빈 구분행 -->
-    <tr><td colspan="4" style="padding:2px;border-left:1.5px solid #000;border-right:1.5px solid #000;background:#fff;"></td></tr>
-    <!-- 예배 순서 -->
-    <tr><td class="lbl">예배의 부름</td><td class="val" colspan="3">${r.call||'다같이'}</td></tr>
-    <tr><td class="lbl">신앙고백</td><td class="val" colspan="3">${r.creed||'다같이 (사도신경)'}</td></tr>
-    <tr><td class="lbl">찬양인도</td><td class="val" colspan="3">${r.praise||''}</td></tr>
-    <tr><td class="lbl">반주</td><td class="val" colspan="3">${r.accompany||'정은정 집사'}</td></tr>
-    <tr><td class="lbl">대표기도</td><td class="val" colspan="3">${r.prayer||''}</td></tr>
-    <tr><td class="lbl">말씀</td><td class="val" colspan="3">${r.word||''}</td></tr>
-    <tr><td class="lbl">설교</td><td class="val" colspan="3">${r.sermon||'엄태우 목사'}</td></tr>
-    <tr><td class="lbl">설교주제</td><td class="val" colspan="3">${r.topic||''}</td></tr>
-    <tr><td class="lbl">예물</td><td class="val" colspan="3">${r.offering||''}</td></tr>
-    <tr><td class="lbl">봉헌기도</td><td class="val" colspan="3">${r.offerpray||'엄태우 목사'}</td></tr>
-    <tr><td class="lbl">축복기도</td><td class="val" colspan="3">${r.bless||'엄태우 목사'}</td></tr>
-    <!-- 참석자 명단 -->
+  </table>
+
+  <table class="pf-body">
+    <tr><td class="lbl">예배의 부름</td><td class="val">${r.call||'다같이'}</td></tr>
+    <tr><td class="lbl">신앙고백</td><td class="val">${r.creed||'다같이 (사도신경)'}</td></tr>
+    <tr><td class="lbl">찬양인도</td><td class="val">${r.praise||''}</td></tr>
+    <tr><td class="lbl">반주</td><td class="val">${r.accompany||'정은정 집사'}</td></tr>
+    <tr><td class="lbl">대표기도</td><td class="val">${r.prayer||''}</td></tr>
+    <tr><td class="lbl">말씀</td><td class="val">${r.word||''}</td></tr>
+    <tr><td class="lbl">설교</td><td class="val">${r.sermon||'엄태우 목사'}</td></tr>
+    <tr><td class="lbl">설교주제</td><td class="val">${r.topic||''}</td></tr>
+    <tr><td class="lbl">예물</td><td class="val">${r.offering||''}</td></tr>
+    <tr><td class="lbl">봉헌기도</td><td class="val">${r.offerpray||'엄태우 목사'}</td></tr>
+    <tr><td class="lbl">축복기도</td><td class="val">${r.bless||'엄태우 목사'}</td></tr>
+  </table>
+
+  <table class="pf-att">
     <tr>
-      <td class="lbl" style="vertical-align:top;padding-top:10px;">참석자명단</td>
-      <td class="att-val" colspan="3">
-        ${on.length ? `<div class="att-sec">&lt;현장&gt;</div><div style="margin-bottom:12px;">${onsiteStr}</div>` : ''}
-        ${ol.length ? `<div class="att-sec">&lt;온라인&gt;</div><div style="margin-bottom:12px;">${onlineStr}</div>` : ''}
-        ${vi.length ? `<div class="att-sec">&lt;방문자&gt;</div><div>${visitorStr}</div>` : ''}
-        ${!hasAttendee ? '　' : ''}
+      <td class="att-lbl" rowspan="2">참석자명단</td>
+      <td class="att-val">
+        ${on.length?`<div class="att-sec">&lt;현장&gt;</div><div style="margin-bottom:10px;">${onsiteStr}</div>`:''}
+        ${ol.length?`<div class="att-sec">&lt;온라인&gt;</div><div style="margin-bottom:10px;">${onlineStr}</div>`:''}
+        ${vi.length?`<div class="att-sec">&lt;방문자&gt;</div><div>${visitorStr}</div>`:''}
+        ${!on.length&&!ol.length&&!vi.length?'　':''}
       </td>
     </tr>
-    <!-- 인원합계 -->
+    <tr style="display:none;"><td></td></tr>
+  </table>
+
+  <table class="pf-att" style="border-top:none;margin-top:0;">
     <tr>
-      <td class="lbl tot-lbl" style="vertical-align:top;padding-top:8px;">참석자 인원합계</td>
-      <td class="tot-val" colspan="3">
+      <td class="tot-lbl">참석자 인원합계</td>
+      <td class="tot-val">
         현장&nbsp;&nbsp;&nbsp;${totOn}명<br>
         온라인&nbsp;${totOl}명<br>
         총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}명
