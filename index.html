@@ -27,23 +27,18 @@
 </script>
 
 <style>
-/* ── 앱 기본 ── */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0f2f5;color:#111;}
 #app{max-width:860px;margin:0 auto;padding:14px;}
-
 .tabs{display:flex;gap:8px;margin-bottom:14px;}
 .tab-btn{flex:1;padding:10px;border:none;border-radius:8px;background:#fff;color:#555;font-size:14px;cursor:pointer;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.1);transition:all .2s;}
 .tab-btn.active{background:#1a3a5c;color:#fff;}
-
 .card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:14px;}
 .card h2{font-size:17px;font-weight:800;margin-bottom:16px;color:#1a202c;border-bottom:2px solid #1a3a5c;padding-bottom:9px;}
 .sec{font-size:11px;font-weight:800;color:#1a3a5c;margin:18px 0 9px;letter-spacing:.5px;}
-
 .part-sel{display:flex;gap:8px;margin-bottom:4px;}
 .part-btn{flex:1;padding:9px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;}
 .part-btn.active{border-color:#1a3a5c;background:#1a3a5c;color:#fff;}
-
 .row{display:flex;gap:10px;margin-bottom:9px;flex-wrap:wrap;}
 .fg{display:flex;flex-direction:column;gap:3px;flex:1;min-width:130px;}
 .fg label{font-size:11px;color:#666;font-weight:700;}
@@ -51,7 +46,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .fg input:focus,.fg textarea:focus{outline:none;border-color:#1a3a5c;background:#fff;}
 .fg textarea{resize:none;min-height:80px;overflow:hidden;}
 .fixed{background:#eef2ff!important;color:#1a3a5c;font-weight:700;}
-
 .sum-box{background:#eef2ff;border-radius:8px;padding:11px 14px;font-size:13px;font-weight:700;color:#1a3a5c;margin-top:4px;}
 .act-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
 .btn{padding:10px 18px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;}
@@ -62,7 +56,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .btn-danger{background:#fee2e2;color:#991b1b;}
 .btn-edit{background:#fef9c3;color:#78350f;}
 .btn-back{background:#e2e8f0;color:#333;}
-
 .list-empty{padding:40px;text-align:center;color:#aaa;font-size:14px;}
 .list-item{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s;}
 .list-item:hover{background:#f7faff;}
@@ -71,7 +64,6 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .li-meta{font-size:11px;color:#888;margin-top:2px;}
 .li-arr{color:#ccc;font-size:20px;}
 .loading{padding:40px;text-align:center;color:#888;font-size:14px;}
-
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;}
 .modal-bg.open{display:flex;}
 .modal{background:#fff;border-radius:14px;padding:24px;max-width:460px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.2);}
@@ -82,60 +74,35 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 #print-area{display:none;}
 @media(max-width:600px){.row{flex-direction:column;}.fg{min-width:unset;}}
 
-/* ══════════════════════════════════
-   양식 공통 CSS (미리보기 + 인쇄 공용)
-   라벨 너비 100px로 넉넉하게 고정
-══════════════════════════════════ */
+/* 양식 공통 (미리보기 + 인쇄 공용) */
 .pf-wrap{width:100%;font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:13px;color:#000;}
 .pf-title{text-align:center;font-size:18px;font-weight:800;padding:0 0 20px;letter-spacing:1px;}
-
-/* 4개 테이블 공통 */
 .pf-wrap table{width:100%;border-collapse:collapse;table-layout:fixed;}
 .pf-wrap td{font-size:13px;vertical-align:middle;word-break:keep-all;padding:6px 10px;}
-
-/* 라벨 너비 100px — '예배의 부름', '참석자명단' 등 긴 글자도 한 줄에 */
-.pf-lbl{
-  background:#e8e8e8;
-  font-weight:700;
-  text-align:center;
-  width:100px;
-  min-width:100px;
-  max-width:100px;
-  white-space:nowrap;
-  overflow:hidden;
-}
+.pf-lbl{background:#e8e8e8;font-weight:700;text-align:center;width:100px;min-width:100px;max-width:100px;white-space:nowrap;overflow:hidden;}
 .pf-val{background:#fff;}
-
-/* 테이블별 외곽선 — 겹침 없이 아래로 이어지도록 */
 .t-head{border:1.5px solid #444;}
 .t-head td{border:1px solid #888;}
-
 .t-body{border:1.5px solid #444;border-top:none;}
 .t-body td{border:1px solid #888;border-top:none;}
 .t-body tr:first-child td{border-top:1px solid #888;}
-
 .t-att{border:1.5px solid #444;border-top:none;}
 .t-att td{border:1px solid #888;border-top:none;}
 .t-att tr:first-child td{border-top:1px solid #888;}
-
 .t-tot{border:1.5px solid #444;border-top:none;}
 .t-tot td{border:1px solid #888;border-top:none;}
 .t-tot tr:first-child td{border-top:1px solid #888;}
-
-/* 참석자명단 셀 */
 .att-val{background:#fff;vertical-align:top!important;padding:9px 12px!important;line-height:1.9;}
 .att-sec{font-weight:700;margin-top:10px;}
 .att-sec:first-child{margin-top:0;}
 .att-names{white-space:pre-wrap;word-break:keep-all;margin-top:3px;}
-
-/* 인원합계 셀 */
 .tot-val{background:#fff;vertical-align:top!important;padding:8px 12px!important;line-height:2.1;}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('write', true)">✏️ 일지 작성</button>
+    <button class="tab-btn active" onclick="showTab('write',true)">✏️ 일지 작성</button>
     <button class="tab-btn" onclick="showTab('list')">📋 저장된 일지</button>
   </div>
 
@@ -232,357 +199,331 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 </div>
 
 <script>
-let currentPart=1, currentDetailId=null, records=[], pendingPrintId=null;
-const partTimes={1:'09:00',2:'11:20',3:'15:30'};
+var currentPart = 1;
+var currentDetailId = null;
+var records = [];
+var pendingPrintId = null;
+var partTimes = {1:'09:00', 2:'11:20', 3:'15:30'};
 
-function autoResize(el){
-  el.style.height='auto';
-  el.style.height=el.scrollHeight+'px';
+function waitDB(fn) {
+  if (window._dbReady) fn();
+  else document.addEventListener('db-ready', fn, {once:true});
 }
 
-if(window._dbReady)fn();else document.addEventListener('db-ready',fn,{once:true});}
-
-function init(){setToday();document.getElementById('f-time').value='09:00';}
-
-function setToday(){
-  const d=new Date();
-  document.getElementById('f-date').value=
-    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
 }
 
-function setPart(n){
-  currentPart=n;
-  document.querySelectorAll('.part-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
-  document.getElementById('f-time').value=partTimes[n];
+function init() {
+  setToday();
+  document.getElementById('f-time').value = '09:00';
 }
 
-function parseNames(s){
-  if(!s||!s.trim())return[];
-  const br=[];
-  s=s.replace(/\(([^)]+)\)/g,(_,inner)=>{br.push(inner.trim());return`__N${br.length-1}__`;});
-  return s.split(/[\s,\n，、]+/).map(x=>x.trim()).filter(x=>x.length>0).map(x=>{
-    const m=x.match(/^__N(\d+)__$/);return m?br[parseInt(m[1])]:x;
+function setToday() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var dd = String(d.getDate()).padStart(2,'0');
+  document.getElementById('f-date').value = y+'-'+m+'-'+dd;
+}
+
+function setPart(n) {
+  currentPart = n;
+  document.querySelectorAll('.part-btn').forEach(function(b,i){ b.classList.toggle('active', i===n-1); });
+  document.getElementById('f-time').value = partTimes[n];
+}
+
+function parseNames(s) {
+  if (!s || !s.trim()) return [];
+  var bracketed = [];
+  s = s.replace(/\(([^)]+)\)/g, function(_, inner) {
+    bracketed.push(inner.trim());
+    return '__N'+(bracketed.length-1)+'__';
+  });
+  return s.split(/[\s,\n]+/).map(function(x){ return x.trim(); }).filter(function(x){ return x.length > 0; }).map(function(x) {
+    var m = x.match(/^__N(\d+)__$/);
+    return m ? bracketed[parseInt(m[1])] : x;
   });
 }
 
-function countN(){
-  const on=parseNames(document.getElementById('f-onsite').value);
-  const ol=parseNames(document.getElementById('f-online').value);
-  const vi=parseNames(document.getElementById('f-visitor').value);
-  document.getElementById('cnt-on').textContent=`(${on.length}명)`;
-  document.getElementById('cnt-ol').textContent=`(${ol.length}명)`;
-  document.getElementById('cnt-vi').textContent=`(${vi.length}명)`;
-  document.getElementById('s-on').textContent=on.length+vi.length;
-  document.getElementById('s-ol').textContent=ol.length;
-  document.getElementById('s-tot').textContent=on.length+ol.length+vi.length;
+function countN() {
+  var on = parseNames(document.getElementById('f-onsite').value);
+  var ol = parseNames(document.getElementById('f-online').value);
+  var vi = parseNames(document.getElementById('f-visitor').value);
+  document.getElementById('cnt-on').textContent = '('+on.length+'명)';
+  document.getElementById('cnt-ol').textContent = '('+ol.length+'명)';
+  document.getElementById('cnt-vi').textContent = '('+vi.length+'명)';
+  document.getElementById('s-on').textContent = on.length+vi.length;
+  document.getElementById('s-ol').textContent = ol.length;
+  document.getElementById('s-tot').textContent = on.length+ol.length+vi.length;
 }
 
-function showTab(t, fromTab){
-  ['write','list','detail'].forEach(id=>
-    document.getElementById('tab-'+id).style.display=id===t?'block':'none');
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>
-    b.classList.toggle('active',(i===0&&t==='write')||(i===1&&(t==='list'||t==='detail'))));
-  if(t==='list') renderList();
-  if(t==='write'&&fromTab) resetForm();
+function showTab(t, fromTab) {
+  ['write','list','detail'].forEach(function(id) {
+    document.getElementById('tab-'+id).style.display = id===t ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(b,i) {
+    b.classList.toggle('active', (i===0&&t==='write')||(i===1&&(t==='list'||t==='detail')));
+  });
+  if (t === 'list') renderList();
+  if (t === 'write' && fromTab) resetForm();
 }
 
-function collectForm(){
-  return{
-    part:currentPart,
-    date:document.getElementById('f-date').value,
-    time:document.getElementById('f-time').value,
-    writer:document.getElementById('f-writer').value,
-    call:document.getElementById('f-call').value,
-    creed:document.getElementById('f-creed').value,
-    praise:document.getElementById('f-praise').value,
-    accompany:document.getElementById('f-accompany').value,
-    prayer:document.getElementById('f-prayer').value,
-    word:document.getElementById('f-word').value,
-    sermon:document.getElementById('f-sermon').value,
-    topic:document.getElementById('f-topic').value,
-    offering:document.getElementById('f-offering').value,
-    offerpray:document.getElementById('f-offerpray').value,
-    bless:document.getElementById('f-bless').value,
-    onsite:parseNames(document.getElementById('f-onsite').value),
-    online:parseNames(document.getElementById('f-online').value),
-    visitor:parseNames(document.getElementById('f-visitor').value),
-    createdAt:Date.now()
+function collectForm() {
+  return {
+    part: currentPart,
+    date: document.getElementById('f-date').value,
+    time: document.getElementById('f-time').value,
+    writer: document.getElementById('f-writer').value,
+    call: document.getElementById('f-call').value,
+    creed: document.getElementById('f-creed').value,
+    praise: document.getElementById('f-praise').value,
+    accompany: document.getElementById('f-accompany').value,
+    prayer: document.getElementById('f-prayer').value,
+    word: document.getElementById('f-word').value,
+    sermon: document.getElementById('f-sermon').value,
+    topic: document.getElementById('f-topic').value,
+    offering: document.getElementById('f-offering').value,
+    offerpray: document.getElementById('f-offerpray').value,
+    bless: document.getElementById('f-bless').value,
+    onsite: parseNames(document.getElementById('f-onsite').value),
+    online: parseNames(document.getElementById('f-online').value),
+    visitor: parseNames(document.getElementById('f-visitor').value),
+    createdAt: Date.now()
   };
 }
 
-function fillForm(r){
+function fillForm(r) {
   setPart(r.part);
-  ['date','time','writer','call','creed','praise','accompany','prayer',
-   'word','sermon','topic','offering','offerpray','bless'].forEach(k=>{
-    const el=document.getElementById('f-'+k);if(el)el.value=r[k]||'';
+  ['date','time','writer','call','creed','praise','accompany','prayer','word','sermon','topic','offering','offerpray','bless'].forEach(function(k) {
+    var el = document.getElementById('f-'+k);
+    if (el) el.value = r[k] || '';
   });
-  document.getElementById('f-onsite').value=(r.onsite||[]).join(' ');
-  document.getElementById('f-online').value=(r.online||[]).join(' ');
-  document.getElementById('f-visitor').value=(r.visitor||[]).join(' ');
+  document.getElementById('f-onsite').value = (r.onsite||[]).join(' ');
+  document.getElementById('f-online').value = (r.online||[]).join(' ');
+  document.getElementById('f-visitor').value = (r.visitor||[]).join(' ');
   countN();
-  ['f-onsite','f-online','f-visitor'].forEach(id=>autoResize(document.getElementById(id)));
-}
-
-function resetForm(){
-  document.querySelectorAll('#tab-write input,#tab-write textarea').forEach(el=>{
-    if(!el.classList.contains('fixed'))el.value='';
-  });
-  document.getElementById('f-call').value='다같이';
-  document.getElementById('f-creed').value='다같이 (사도신경)';
-  document.getElementById('f-accompany').value='정은정 집사';
-  document.getElementById('f-sermon').value='엄태우 목사';
-  document.getElementById('f-offerpray').value='엄태우 목사';
-  document.getElementById('f-bless').value='엄태우 목사';
-  currentDetailId=null;
-  setToday();setPart(1);countN();
-}
-
-async function saveRecord(){
-  const r=collectForm();
-  if(!r.date){alert('날짜를 입력해주세요.');return;}
-  waitDB(async()=>{
-    try{
-      if(currentDetailId){
-        const ex=records.find(x=>x._id===currentDetailId);
-        if(ex)r.createdAt=ex.createdAt;
-        await window._fns.updateDoc(window._fns.doc(window._db,'records',currentDetailId),r);
-        currentDetailId=null;alert('수정되었습니다!');
-      }else{
-        await window._fns.addDoc(window._col,r);alert('저장되었습니다!');
-      }
-      showTab('list');
-    }catch(e){alert('저장 실패: '+e.message);console.error(e);}
+  ['f-onsite','f-online','f-visitor'].forEach(function(id) {
+    autoResize(document.getElementById(id));
   });
 }
 
-async function loadRecords(){
-  return new Promise(resolve=>{
-    waitDB(async()=>{
-      try{
-        const q=window._fns.query(window._col,window._fns.orderBy('createdAt','desc'));
-        const snap=await window._fns.getDocs(q);
-        let recs=snap.docs.map(d=>({...d.data(),_id:d.id}));
-        recs.sort((a,b)=>{
-          if(b.date!==a.date)return b.date.localeCompare(a.date);
-          return(a.part||1)-(b.part||1);
+function resetForm() {
+  document.querySelectorAll('#tab-write input,#tab-write textarea').forEach(function(el) {
+    if (!el.classList.contains('fixed')) el.value = '';
+  });
+  document.getElementById('f-call').value = '다같이';
+  document.getElementById('f-creed').value = '다같이 (사도신경)';
+  document.getElementById('f-accompany').value = '정은정 집사';
+  document.getElementById('f-sermon').value = '엄태우 목사';
+  document.getElementById('f-offerpray').value = '엄태우 목사';
+  document.getElementById('f-bless').value = '엄태우 목사';
+  currentDetailId = null;
+  setToday();
+  setPart(1);
+  countN();
+  ['f-onsite','f-online','f-visitor'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.style.height = 'auto';
+  });
+}
+
+function saveRecord() {
+  var r = collectForm();
+  if (!r.date) { alert('날짜를 입력해주세요.'); return; }
+  waitDB(function() {
+    if (currentDetailId) {
+      var ex = records.find(function(x){ return x._id === currentDetailId; });
+      if (ex) r.createdAt = ex.createdAt;
+      window._fns.updateDoc(window._fns.doc(window._db,'records',currentDetailId), r).then(function() {
+        currentDetailId = null;
+        alert('수정되었습니다!');
+        showTab('list');
+      }).catch(function(e){ alert('저장 실패: '+e.message); });
+    } else {
+      window._fns.addDoc(window._col, r).then(function() {
+        alert('저장되었습니다!');
+        showTab('list');
+      }).catch(function(e){ alert('저장 실패: '+e.message); });
+    }
+  });
+}
+
+function loadRecords() {
+  return new Promise(function(resolve) {
+    waitDB(function() {
+      var q = window._fns.query(window._col, window._fns.orderBy('createdAt','desc'));
+      window._fns.getDocs(q).then(function(snap) {
+        var recs = snap.docs.map(function(d){ return Object.assign({}, d.data(), {_id:d.id}); });
+        recs.sort(function(a,b){
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          return (a.part||1)-(b.part||1);
         });
-        records=recs;resolve(records);
-      }catch(e){console.error(e);records=[];resolve([]);}
+        records = recs;
+        resolve(records);
+      }).catch(function(e){ console.error(e); records=[]; resolve([]); });
     });
   });
 }
 
-async function deleteRecord(){
-  if(!confirm('삭제하시겠습니까?'))return;
-  waitDB(async()=>{
-    try{
-      await window._fns.deleteDoc(window._fns.doc(window._db,'records',currentDetailId));
-      currentDetailId=null;showTab('list');
-    }catch(e){alert('삭제 실패: '+e.message);}
+function deleteRecord() {
+  if (!confirm('삭제하시겠습니까?')) return;
+  waitDB(function() {
+    window._fns.deleteDoc(window._fns.doc(window._db,'records',currentDetailId)).then(function() {
+      currentDetailId = null;
+      showTab('list');
+    }).catch(function(e){ alert('삭제 실패: '+e.message); });
   });
 }
 
-function fmtDate(d){
-  if(!d)return'';const[y,m,dd]=d.split('-');return`${y}년 ${m}월 ${dd}일`;
+function fmtDate(d) {
+  if (!d) return '';
+  var parts = d.split('-');
+  return parts[0]+'년 '+parts[1]+'월 '+parts[2]+'일';
 }
 
-async function renderList(){
-  const c=document.getElementById('list-container');
-  c.innerHTML='<div class="loading">불러오는 중...</div>';
-  await loadRecords();
-  if(!records.length){c.innerHTML='<div class="list-empty">저장된 일지가 없습니다.</div>';return;}
-  c.innerHTML=records.map(r=>`
-    <div class="list-item" onclick="openDetail('${r._id}')">
-      <div>
-        <div class="li-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
-        <div class="li-meta">${fmtDate(r.date)} · 작성자: ${r.writer||'-'} · 현장 ${(r.onsite||[]).length+(r.visitor||[]).length}명 / 온라인 ${(r.online||[]).length}명</div>
-      </div>
-      <div class="li-arr">›</div>
-    </div>`).join('');
+function renderList() {
+  var c = document.getElementById('list-container');
+  c.innerHTML = '<div class="loading">불러오는 중...</div>';
+  loadRecords().then(function() {
+    if (!records.length) { c.innerHTML='<div class="list-empty">저장된 일지가 없습니다.</div>'; return; }
+    c.innerHTML = records.map(function(r) {
+      return '<div class="list-item" onclick="openDetail(\''+r._id+'\')">'
+        +'<div>'
+        +'<div class="li-title">신촌연합교회 주일예배일지 ('+r.part+'부)</div>'
+        +'<div class="li-meta">'+fmtDate(r.date)+' · 작성자: '+(r.writer||'-')+' · 현장 '+((r.onsite||[]).length+(r.visitor||[]).length)+'명 / 온라인 '+(r.online||[]).length+'명</div>'
+        +'</div>'
+        +'<div class="li-arr">›</div>'
+        +'</div>';
+    }).join('');
+  });
 }
 
-function openDetail(id){
-  currentDetailId=id;
-  const r=records.find(x=>x._id===id);
-  if(!r)return;
-  document.getElementById('detail-content').innerHTML=buildPF(r);
+function openDetail(id) {
+  currentDetailId = id;
+  var r = records.find(function(x){ return x._id===id; });
+  if (!r) return;
+  document.getElementById('detail-content').innerHTML = buildPF(r);
   showTab('detail');
 }
 
-function editRecord(){
-  const r=records.find(x=>x._id===currentDetailId);
-  if(!r)return;
+function editRecord() {
+  var r = records.find(function(x){ return x._id===currentDetailId; });
+  if (!r) return;
   fillForm(r);
-  showTab('write'); // fromTab 없음 → 초기화 안 함
+  showTab('write');
 }
 
-function openPrintModal(id){pendingPrintId=id;document.getElementById('print-modal').classList.add('open');}
-function closePrintModal(){document.getElementById('print-modal').classList.remove('open');}
+function openPrintModal(id) { pendingPrintId=id; document.getElementById('print-modal').classList.add('open'); }
+function closePrintModal() { document.getElementById('print-modal').classList.remove('open'); }
 
-function doPrint(){
+function doPrint() {
   closePrintModal();
-  const r=pendingPrintId===null?collectForm():records.find(x=>x._id===pendingPrintId);
-  if(!r)return;
-  const html=buildPageHTML(r);
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const win=window.open(url,'_blank');
-  if(!win)alert('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.');
-  setTimeout(()=>URL.revokeObjectURL(url),15000);
+  var r = pendingPrintId===null ? collectForm() : records.find(function(x){ return x._id===pendingPrintId; });
+  if (!r) return;
+  var html = buildPageHTML(r);
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var win = window.open(url, '_blank');
+  if (!win) alert('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.');
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 15000);
 }
 
-function chunkNames(arr,size=9){
-  const rows=[];
-  for(let i=0;i<arr.length;i+=size)rows.push(arr.slice(i,i+size).join('  '));
+function chunkNames(arr, size) {
+  size = size || 9;
+  var rows = [];
+  for (var i=0; i<arr.length; i+=size) rows.push(arr.slice(i,i+size).join('  '));
   return rows.join('\n');
 }
 
-/* ── 공통 양식 HTML ── */
-function buildPF(r){
-  const on=r.onsite||[],ol=r.online||[],vi=r.visitor||[];
-  const totOn=on.length+vi.length,totOl=ol.length,tot=totOn+totOl;
-  let dateStr='년    월    일',timeStr='';
-  if(r.date){const[y,mo,d]=r.date.split('-');dateStr=`${y}년 ${parseInt(mo)}월 ${parseInt(d)}일`;}
-  if(r.time){
-    let[h,m]=r.time.split(':');h=parseInt(h);
-    const ap=h<12?'오전':'오후';
-    const hh=h===0?12:h>12?h-12:h;
-    timeStr=` ${ap} ${hh}시${m!=='00'?' '+m+'분':''}`;
+function buildPF(r) {
+  var on = r.onsite||[], ol = r.online||[], vi = r.visitor||[];
+  var totOn = on.length+vi.length, totOl = ol.length, tot = totOn+totOl;
+  var dateStr = '년    월    일', timeStr = '';
+  if (r.date) {
+    var dp = r.date.split('-');
+    dateStr = dp[0]+'년 '+parseInt(dp[1])+'월 '+parseInt(dp[2])+'일';
   }
-  const onsiteStr=chunkNames(on,9);
-  const onlineStr=chunkNames(ol,9);
-  const visitorStr=chunkNames(vi,9);
+  if (r.time) {
+    var tp = r.time.split(':');
+    var h = parseInt(tp[0]), m = tp[1];
+    var ap = h<12?'오전':'오후';
+    var hh = h===0?12:h>12?h-12:h;
+    timeStr = ' '+ap+' '+hh+'시'+(m!=='00'?' '+m+'분':'');
+  }
+  var onsiteStr  = chunkNames(on, 9);
+  var onlineStr  = chunkNames(ol, 9);
+  var visitorStr = chunkNames(vi, 9);
 
-  return `
-<div class="pf-wrap">
-  <div class="pf-title">신촌연합교회 주일예배일지 (${r.part}부)</div>
-
-  <table class="t-head">
-    <colgroup><col style="width:100px"><col><col style="width:60px"><col style="width:110px"></colgroup>
-    <tr>
-      <td class="pf-lbl">일시</td>
-      <td class="pf-val">${dateStr}${timeStr}</td>
-      <td class="pf-lbl">작성자</td>
-      <td class="pf-val">${r.writer||''}</td>
-    </tr>
-  </table>
-
-  <table class="t-body">
-    <colgroup><col style="width:100px"><col></colgroup>
-    <tr><td class="pf-lbl">예배의 부름</td><td class="pf-val">${r.call||'다같이'}</td></tr>
-    <tr><td class="pf-lbl">신앙고백</td><td class="pf-val">${r.creed||'다같이 (사도신경)'}</td></tr>
-    <tr><td class="pf-lbl">찬양인도</td><td class="pf-val">${r.praise||''}</td></tr>
-    <tr><td class="pf-lbl">반주</td><td class="pf-val">${r.accompany||'정은정 집사'}</td></tr>
-    <tr><td class="pf-lbl">대표기도</td><td class="pf-val">${r.prayer||''}</td></tr>
-    <tr><td class="pf-lbl">말씀</td><td class="pf-val">${r.word||''}</td></tr>
-    <tr><td class="pf-lbl">설교</td><td class="pf-val">${r.sermon||'엄태우 목사'}</td></tr>
-    <tr><td class="pf-lbl">설교주제</td><td class="pf-val">${r.topic||''}</td></tr>
-    <tr><td class="pf-lbl">예물</td><td class="pf-val">${r.offering||''}</td></tr>
-    <tr><td class="pf-lbl">봉헌기도</td><td class="pf-val">${r.offerpray||'엄태우 목사'}</td></tr>
-    <tr><td class="pf-lbl">축복기도</td><td class="pf-val">${r.bless||'엄태우 목사'}</td></tr>
-  </table>
-
-  <table class="t-att">
-    <colgroup><col style="width:100px"><col></colgroup>
-    <tr>
-      <td class="pf-lbl" style="vertical-align:top;padding-top:10px;">참석자명단</td>
-      <td class="att-val">
-        ${on.length?`<div class="att-sec">&lt;현장&gt;</div><div class="att-names" style="margin-bottom:10px;">${onsiteStr}</div>`:''}
-        ${ol.length?`<div class="att-sec">&lt;온라인&gt;</div><div class="att-names" style="margin-bottom:10px;">${onlineStr}</div>`:''}
-        ${vi.length?`<div class="att-sec">&lt;방문자&gt;</div><div class="att-names">${visitorStr}</div>`:''}
-        ${!on.length&&!ol.length&&!vi.length?'　':''}
-      </td>
-    </tr>
-  </table>
-
-  <table class="t-tot">
-    <colgroup><col style="width:100px"><col></colgroup>
-    <tr>
-      <td class="pf-lbl" style="line-height:1.6;word-break:keep-all;">참석자<br>인원합계</td>
-      <td class="tot-val">
-        현장&nbsp;&nbsp;&nbsp;${totOn}명<br>
-        온라인&nbsp;${totOl}명<br>
-        총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tot}명
-      </td>
-    </tr>
-  </table>
-</div>`;
+  return '<div class="pf-wrap">'
+    +'<div class="pf-title">신촌연합교회 주일예배일지 ('+r.part+'부)</div>'
+    +'<table class="t-head"><colgroup><col style="width:100px"><col><col style="width:60px"><col style="width:110px"></colgroup>'
+    +'<tr><td class="pf-lbl">일시</td><td class="pf-val">'+dateStr+timeStr+'</td>'
+    +'<td class="pf-lbl">작성자</td><td class="pf-val">'+(r.writer||'')+'</td></tr></table>'
+    +'<table class="t-body"><colgroup><col style="width:100px"><col></colgroup>'
+    +'<tr><td class="pf-lbl">예배의 부름</td><td class="pf-val">'+(r.call||'다같이')+'</td></tr>'
+    +'<tr><td class="pf-lbl">신앙고백</td><td class="pf-val">'+(r.creed||'다같이 (사도신경)')+'</td></tr>'
+    +'<tr><td class="pf-lbl">찬양인도</td><td class="pf-val">'+(r.praise||'')+'</td></tr>'
+    +'<tr><td class="pf-lbl">반주</td><td class="pf-val">'+(r.accompany||'정은정 집사')+'</td></tr>'
+    +'<tr><td class="pf-lbl">대표기도</td><td class="pf-val">'+(r.prayer||'')+'</td></tr>'
+    +'<tr><td class="pf-lbl">말씀</td><td class="pf-val">'+(r.word||'')+'</td></tr>'
+    +'<tr><td class="pf-lbl">설교</td><td class="pf-val">'+(r.sermon||'엄태우 목사')+'</td></tr>'
+    +'<tr><td class="pf-lbl">설교주제</td><td class="pf-val">'+(r.topic||'')+'</td></tr>'
+    +'<tr><td class="pf-lbl">예물</td><td class="pf-val">'+(r.offering||'')+'</td></tr>'
+    +'<tr><td class="pf-lbl">봉헌기도</td><td class="pf-val">'+(r.offerpray||'엄태우 목사')+'</td></tr>'
+    +'<tr><td class="pf-lbl">축복기도</td><td class="pf-val">'+(r.bless||'엄태우 목사')+'</td></tr>'
+    +'</table>'
+    +'<table class="t-att"><colgroup><col style="width:100px"><col></colgroup>'
+    +'<tr><td class="pf-lbl" style="vertical-align:top;padding-top:10px;">참석자명단</td>'
+    +'<td class="att-val">'
+    +(on.length ? '<div class="att-sec">&lt;현장&gt;</div><div class="att-names" style="margin-bottom:10px;">'+onsiteStr+'</div>' : '')
+    +(ol.length ? '<div class="att-sec">&lt;온라인&gt;</div><div class="att-names" style="margin-bottom:10px;">'+onlineStr+'</div>' : '')
+    +(vi.length ? '<div class="att-sec">&lt;방문자&gt;</div><div class="att-names">'+visitorStr+'</div>' : '')
+    +(!on.length&&!ol.length&&!vi.length ? '　' : '')
+    +'</td></tr></table>'
+    +'<table class="t-tot"><colgroup><col style="width:100px"><col></colgroup>'
+    +'<tr><td class="pf-lbl" style="line-height:1.6;">참석자<br>인원합계</td>'
+    +'<td class="tot-val">현장&nbsp;&nbsp;&nbsp;'+totOn+'명<br>온라인&nbsp;'+totOl+'명<br>총&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+tot+'명</td>'
+    +'</tr></table>'
+    +'</div>';
 }
 
-/* ── 인쇄 전용 페이지 (앱 CSS 그대로 인라인) ── */
-function buildPageHTML(r){
-  return `<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>신촌연합교회 주일예배일지 (${r.part}부)</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
-  background:#fff;color:#000;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  text-rendering:optimizeLegibility;
-}
-body{padding:10mm 13mm 8mm;}
-
-.pf-wrap{width:100%;}
-.pf-title{text-align:center;font-size:20pt;font-weight:800;padding:0 0 18px;letter-spacing:1px;}
-
-.pf-wrap table{width:100%;border-collapse:collapse;table-layout:fixed;}
-.pf-wrap td{font-size:11pt;vertical-align:middle;word-break:keep-all;padding:5px 10px;}
-
-/* 라벨 — 100px 고정으로 글자 넘침 방지 */
-.pf-lbl{
-  background:#e8e8e8 !important;
-  font-weight:700;
-  text-align:center;
-  width:100px;
-  min-width:100px;
-  max-width:100px;
-  white-space:nowrap;
-  overflow:hidden;
-}
-.pf-val{background:#fff;}
-
-/* 테이블 외곽선 — 겹침 없이 아래로 연결 */
-.t-head{border:1.5px solid #333;}
-.t-head td{border:1px solid #888;}
-
-.t-body{border:1.5px solid #333;border-top:none;}
-.t-body td{border:1px solid #888;border-top:none;}
-.t-body tr:first-child td{border-top:1px solid #888;}
-
-.t-att{border:1.5px solid #333;border-top:none;}
-.t-att td{border:1px solid #888;border-top:none;}
-.t-att tr:first-child td{border-top:1px solid #888;}
-
-.t-tot{border:1.5px solid #333;border-top:none;}
-.t-tot td{border:1px solid #888;border-top:none;}
-.t-tot tr:first-child td{border-top:1px solid #888;}
-
-.att-val{background:#fff;vertical-align:top!important;padding:9px 12px!important;line-height:1.9;font-size:10.5pt;}
-.att-sec{font-weight:700;margin-top:10px;font-size:11pt;}
-.att-sec:first-child{margin-top:0;}
-.att-names{white-space:pre-wrap;word-break:keep-all;margin-top:3px;}
-.tot-val{background:#fff;vertical-align:top!important;padding:8px 12px!important;line-height:2.1;font-size:11pt;}
-
-@media print{
-  @page{size:A4 portrait;margin:10mm 13mm;}
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-}
-</style>
-</head>
-<body>
-${buildPF(r)}
-<script>
-  var t=setTimeout(function(){window.print();},2000);
-  document.fonts.ready.then(function(){clearTimeout(t);window.print();});
-<\/script>
-</body>
-</html>`;
+function buildPageHTML(r) {
+  return '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n'
+    +'<meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
+    +'<title>신촌연합교회 주일예배일지 ('+r.part+'부)</title>\n'
+    +'<style>\n'
+    +'*{box-sizing:border-box;margin:0;padding:0;}\n'
+    +'html,body{font-family:\'맑은 고딕\',\'Malgun Gothic\',\'Apple SD Gothic Neo\',sans-serif;background:#fff;color:#000;-webkit-font-smoothing:antialiased;}\n'
+    +'body{padding:10mm 13mm 8mm;}\n'
+    +'.pf-wrap{width:100%;}\n'
+    +'.pf-title{text-align:center;font-size:20pt;font-weight:800;padding:0 0 18px;letter-spacing:1px;}\n'
+    +'.pf-wrap table{width:100%;border-collapse:collapse;table-layout:fixed;}\n'
+    +'.pf-wrap td{font-size:11pt;vertical-align:middle;word-break:keep-all;padding:5px 10px;}\n'
+    +'.pf-lbl{background:#e8e8e8!important;font-weight:700;text-align:center;width:100px;min-width:100px;max-width:100px;white-space:nowrap;overflow:hidden;}\n'
+    +'.pf-val{background:#fff;}\n'
+    +'.t-head{border:1.5px solid #333;}\n'
+    +'.t-head td{border:1px solid #888;}\n'
+    +'.t-body{border:1.5px solid #333;border-top:none;}\n'
+    +'.t-body td{border:1px solid #888;border-top:none;}\n'
+    +'.t-body tr:first-child td{border-top:1px solid #888;}\n'
+    +'.t-att{border:1.5px solid #333;border-top:none;}\n'
+    +'.t-att td{border:1px solid #888;border-top:none;}\n'
+    +'.t-att tr:first-child td{border-top:1px solid #888;}\n'
+    +'.t-tot{border:1.5px solid #333;border-top:none;}\n'
+    +'.t-tot td{border:1px solid #888;border-top:none;}\n'
+    +'.t-tot tr:first-child td{border-top:1px solid #888;}\n'
+    +'.att-val{background:#fff;vertical-align:top!important;padding:9px 12px!important;line-height:1.9;font-size:10.5pt;}\n'
+    +'.att-sec{font-weight:700;margin-top:10px;font-size:11pt;}\n'
+    +'.att-sec:first-child{margin-top:0;}\n'
+    +'.att-names{white-space:pre-wrap;word-break:keep-all;margin-top:3px;}\n'
+    +'.tot-val{background:#fff;vertical-align:top!important;padding:8px 12px!important;line-height:2.1;font-size:11pt;}\n'
+    +'@media print{@page{size:A4 portrait;margin:10mm 13mm;}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}\n'
+    +'</style>\n</head>\n<body>\n'
+    + buildPF(r)
+    +'\n<script>var t=setTimeout(function(){window.print();},2000);document.fonts.ready.then(function(){clearTimeout(t);window.print();});<\/script>\n'
+    +'</body>\n</html>';
 }
 
 init();
