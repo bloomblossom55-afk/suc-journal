@@ -95,7 +95,7 @@ body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',sans-seri
 .att-val{background:#fff;vertical-align:top!important;padding:9px 12px!important;line-height:1.9;}
 .att-sec{font-weight:700;margin-top:10px;}
 .att-sec:first-child{margin-top:0;}
-.att-names{white-space:pre-wrap;word-break:keep-all;margin-top:3px;}
+.att-names{word-break:keep-all;margin-top:3px;white-space:normal;}
 .tot-val{background:#fff;vertical-align:top!important;padding:8px 12px!important;line-height:2.1;}
 </style>
 </head>
@@ -430,11 +430,8 @@ function doPrint() {
   setTimeout(function(){ URL.revokeObjectURL(url); }, 15000);
 }
 
-function chunkNames(arr, size) {
-  size = size || 9;
-  var rows = [];
-  for (var i=0; i<arr.length; i+=size) rows.push(arr.slice(i,i+size).join('  '));
-  return rows.join('\n');
+function chunkNames(arr) {
+  return arr.join('  ');
 }
 
 function buildPF(r) {
@@ -517,7 +514,7 @@ function buildPageHTML(r) {
     +'.att-val{background:#fff;vertical-align:top!important;padding:9px 12px!important;line-height:1.9;font-size:10.5pt;}\n'
     +'.att-sec{font-weight:700;margin-top:10px;font-size:11pt;}\n'
     +'.att-sec:first-child{margin-top:0;}\n'
-    +'.att-names{white-space:pre-wrap;word-break:keep-all;margin-top:3px;}\n'
+    +'.att-names{word-break:keep-all;margin-top:3px;white-space:normal;}\n'
     +'.tot-val{background:#fff;vertical-align:top!important;padding:8px 12px!important;line-height:2.1;font-size:11pt;}\n'
     +'@media print{@page{size:A4 portrait;margin:10mm 13mm;}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}\n'
     +'</style>\n</head>\n<body>\n'
