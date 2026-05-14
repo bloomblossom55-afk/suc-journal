@@ -353,7 +353,7 @@ function saveRecord() {
 function loadRecords() {
   return new Promise(function(resolve) {
     waitDB(function() {
-      var q = window._fns.query(window._col, window._fns.orderBy('createdAt','desc'));
+      var q = window._fns.query(window._col, window._fns.orderBy('createdAt','asc'));
       window._fns.getDocs(q).then(function(snap) {
         var recs = snap.docs.map(function(d){ return Object.assign({}, d.data(), {_id:d.id}); });
         recs.sort(function(a,b){
