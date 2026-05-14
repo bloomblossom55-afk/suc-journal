@@ -489,7 +489,7 @@ function buildPF(r) {
 function buildPageHTML(r) {
   return '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n'
     +'<meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
-    +'<title>신촌연합교회 주일예배일지 ('+r.part+'부)</title>\n'
+    +'<title>신촌연합교회 주일예배일지('+r.part+'부)_'+(r.date ? r.date.replace(/-/g,'') : '')+'</title>\n'
     +'<style>\n'
     +'*{box-sizing:border-box;margin:0;padding:0;}\n'
     +'html,body{font-family:\'맑은 고딕\',\'Malgun Gothic\',\'Apple SD Gothic Neo\',sans-serif;background:#fff;color:#000;-webkit-font-smoothing:antialiased;}\n'
